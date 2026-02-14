@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 VIP AI PRO</title>
+<title>AI MD5 VIP PRO</title>
 
 <style>
 body{
@@ -15,26 +15,204 @@ body{
 
 /* Header */
 .header{
-    padding:20px;
+    padding:25px;
     background:linear-gradient(90deg,#00c853,#00e5ff);
 }
 
 /* Robot */
 .robot{
-    width:100px;
-    margin-top:10px;
+    width:90px;
     animation: glow 2s infinite;
 }
 
-/* Phát sáng */
 @keyframes glow{
     0%{filter:drop-shadow(0 0 5px #00e5ff);}
     50%{filter:drop-shadow(0 0 25px #00e5ff);}
     100%{filter:drop-shadow(0 0 5px #00e5ff);}
 }
 
-/* Khi AI chạy */
+/* Khi phân tích */
 .robot.active{
+    animation: spin 1s linear infinite, glow 1s infinite;
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+/* Card */
+.container{
+    padding:20px;
+}
+
+.card{
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:15px;
+    margin-top:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.6);
+}
+
+/* Input */
+input{
+    width:90%;
+    padding:14px;
+    border-radius:10px;
+    border:none;
+    margin-top:10px;
+    font-size:16px;
+    outline:none;
+}
+
+/* Button */
+button{
+    margin-top:10px;
+    padding:12px 30px;
+    background:linear-gradient(90deg,#00c853,#00b0ff);
+    border:none;
+    color:white;
+    border-radius:10px;
+    font-size:16px;
+    box-shadow:0 0 10px rgba(0,255,200,0.4);
+}
+
+/* Result */
+.result{
+    margin-top:15px;
+    line-height:1.8;
+    font-size:16px;
+}
+
+/* Loading */
+.loading{
+    display:none;
+    margin-top:15px;
+}
+
+.bar{
+    width:80%;
+    height:10px;
+    background:#333;
+    margin:auto;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.bar-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#00c853,#00e5ff);
+}
+
+/* AI text */
+.ai{
+    color:#00e5ff;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <img id="robot" class="robot"
+    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+    <h2>AI MD5 VIP PRO</h2>
+</div>
+
+<div class="container">
+
+<div class="card">
+<input id="md5" placeholder="Nhập MD5 (32 ký tự)">
+<br>
+<button onclick="analyze()">Phân tích</button>
+</div>
+
+<div class="loading" id="loading">
+AI đang phân tích: <span id="percent">0</span>%
+<div class="bar">
+<div class="bar-fill" id="bar"></div>
+</div>
+</div>
+
+<div class="card result" id="result">
+Chưa có kết quả
+</div>
+
+</div>
+
+<script>
+function analyze(){
+
+    let md5 = document.getElementById("md5").value.trim().toLowerCase();
+    let robot = document.getElementById("robot");
+    let loading = document.getElementById("loading");
+    let bar = document.getElementById("bar");
+    let percentText = document.getElementById("percent");
+    let result = document.getElementById("result");
+
+    if(md5.length != 32){
+        result.innerHTML = "MD5 không hợp lệ";
+        return;
+    }
+
+    robot.classList.add("active");
+    loading.style.display = "block";
+    bar.style.width = "0%";
+    percentText.innerHTML = "0";
+    result.innerHTML = "Đang xử lý AI...";
+
+    let progress = 0;
+
+    let interval = setInterval(function(){
+        progress += Math.floor(Math.random()*7)+4;
+        if(progress > 100) progress = 100;
+
+        bar.style.width = progress + "%";
+        percentText.innerHTML = progress;
+
+        if(progress >= 100){
+            clearInterval(interval);
+            showResult(md5);
+            robot.classList.remove("active");
+        }
+    },120);
+}
+
+function showResult(md5){
+
+    let hash = 0;
+    for(let i=0;i<md5.length;i++){
+        hash += md5.charCodeAt(i);
+    }
+
+    let tai = (hash % 51) + 50;
+    let xiu = 100 - tai;
+    let choose = tai > xiu ? "TÀI" : "XỈU";
+
+    let diff = Math.abs(tai - xiu);
+    let trust;
+    if(diff > 30) trust="Rất cao";
+    else if(diff > 20) trust="Cao";
+    else if(diff > 10) trust="Trung bình";
+    else trust="Thấp";
+
+    let luck_list=["Cực cao","Cao","Trung bình","Thấp"];
+    let luck = luck_list[hash % luck_list.length];
+
+    document.getElementById("result").innerHTML =
+        "<div class='ai'>AI Phân tích VIP</div><br>" +
+        "Tài: " + tai + "%<br>" +
+        "Xỉu: " + xiu + "%<br><br>" +
+        "Nên chọn: <b>" + choose + "</b><br>" +
+        "Độ tin cậy: " + trust + "<br>" +
+        "May mắn: " + luck;
+}
+</script>
+
+</body>
+</html>.robot.active{
     animation: spin 1s linear infinite, glow 1s infinite;
 }
 
