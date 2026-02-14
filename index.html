@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 VIP AI PRO</title>
-
-<style>
+<title>MD5 VIP AI PRO</title><style>
 body{
     margin:0;
     font-family:Arial;
@@ -19,28 +16,63 @@ body{
     background:linear-gradient(90deg,#00c853,#00e5ff);
 }
 
+/* Robot wrapper để scan */
+.robot-wrapper{
+    position:relative;
+    display:inline-block;
+    margin-top:10px;
+}
+
 /* Robot */
 .robot{
     width:100px;
-    margin-top:10px;
     animation: glow 2s infinite;
 }
 
-/* Phát sáng */
+/* Phát sáng nhẹ */
 @keyframes glow{
     0%{filter:drop-shadow(0 0 5px #00e5ff);}
     50%{filter:drop-shadow(0 0 25px #00e5ff);}
     100%{filter:drop-shadow(0 0 5px #00e5ff);}
 }
 
-/* Khi AI chạy */
+/* Khi AI chạy (KHÔNG XOAY) */
 .robot.active{
-    animation: spin 1s linear infinite, glow 1s infinite;
+    animation: analyzePulse 1.2s infinite, glow 1s infinite;
 }
 
-@keyframes spin{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
+/* Nhấp nháy + phóng nhẹ */
+@keyframes analyzePulse{
+    0%{
+        transform:scale(1);
+        filter:brightness(1);
+    }
+    50%{
+        transform:scale(1.08);
+        filter:brightness(1.6);
+    }
+    100%{
+        transform:scale(1);
+        filter:brightness(1);
+    }
+}
+
+/* Scan chạy qua robot */
+.robot-wrapper.active::after{
+    content:"";
+    position:absolute;
+    top:-100%;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(transparent,rgba(0,229,255,0.5),transparent);
+    animation: robotScan 2s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes robotScan{
+    from{top:-100%;}
+    to{top:100%;}
 }
 
 /* Container */
@@ -67,11 +99,12 @@ input{
 button{
     margin-top:10px;
     padding:12px 30px;
-    background:#00c853;
+    background:linear-gradient(90deg,#00c853,#00e5ff);
     color:white;
     border:none;
     border-radius:8px;
     font-size:16px;
+    box-shadow:0 0 10px rgba(0,229,255,0.5);
 }
 
 /* Loading bar */
@@ -90,7 +123,7 @@ button{
     background:linear-gradient(90deg,#00c853,#00e5ff);
 }
 
-/* Scan effect */
+/* Scan effect box */
 .scan{
     position:relative;
     overflow:hidden;
@@ -116,45 +149,29 @@ button{
     margin-top:15px;
     line-height:1.8;
 }
-</style>
-</head>
-
-<body>
-
-<div class="header">
+</style></head><body><div class="header">
     <h2>MD5 VIP AI</h2>
-</div>
-
-<div class="container">
-
-<img id="robot" class="robot"
-src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
-
-<div class="card">
+</div><div class="container"><div id="robotWrap" class="robot-wrapper">
+    <img id="robot" class="robot"
+    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+</div><div class="card">
 <input id="md5" placeholder="Nhập MD5 (32 ký tự)">
 <br>
 <button onclick="analyze()">Phân tích</button>
-</div>
-
-<div class="card scan" id="loadingBox" style="display:none;">
+</div><div class="card scan" id="loadingBox" style="display:none;">
     AI đang phân tích: <span id="percent">0</span>%
     <div class="progress">
         <div class="bar" id="bar"></div>
     </div>
-</div>
-
-<div class="card result" id="result">
+</div><div class="card result" id="result">
 Chưa có kết quả
-</div>
-
-</div>
-
-<script>
+</div></div><script>
 
 function analyze(){
 
     let md5 = document.getElementById("md5").value.trim().toLowerCase();
     let robot = document.getElementById("robot");
+    let robotWrap = document.getElementById("robotWrap");
     let bar = document.getElementById("bar");
     let percentText = document.getElementById("percent");
     let loadingBox = document.getElementById("loadingBox");
@@ -167,6 +184,8 @@ function analyze(){
 
     // bật hiệu ứng AI
     robot.classList.add("active");
+    robotWrap.classList.add("active");
+
     loadingBox.style.display = "block";
     bar.style.width = "0%";
     percentText.innerHTML = "0";
@@ -184,7 +203,10 @@ function analyze(){
         if(progress >= 100){
             clearInterval(interval);
             showResult(md5);
+
+            // tắt hiệu ứng
             robot.classList.remove("active");
+            robotWrap.classList.remove("active");
         }
     },120);
 }
@@ -218,7 +240,5 @@ function showResult(md5){
         "May mắn: " + luck;
 }
 
-</script>
-
-</body>
+</script></body>
 </html>
