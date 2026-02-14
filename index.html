@@ -1,7 +1,10 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 VIP AI PRO</title><style>
+<title>MD5 VIP AI PRO</title>
+
+<style>
 body{
     margin:0;
     font-family:Arial;
@@ -74,6 +77,7 @@ input{
     border:none;
     border-radius:8px;
     font-size:16px;
+    margin-top:8px;
 }
 
 button{
@@ -126,25 +130,72 @@ button{
     margin-top:15px;
     line-height:1.8;
 }
-</style></head><body><div class="header">
+</style>
+</head>
+
+<body>
+
+<div class="header">
     <h2>MD5 AI (VIP PRO / THƯỜNG)</h2>
-</div><div class="container"><div id="robotWrap" class="robot-wrapper">
+</div>
+
+<div class="container">
+
+<div id="robotWrap" class="robot-wrapper">
     <img id="robot" class="robot"
     src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
-</div><div class="card">
+</div>
+
+<!-- Nhập MD5 -->
+<div class="card">
 <input id="md5" placeholder="Nhập MD5 (32 ký tự)">
 <br>
 <button onclick="analyze('vip')">VIP PRO</button>
 <button onclick="analyze('basic')">THƯỜNG</button>
-</div><div class="card scan" id="loadingBox" style="display:none;">
+</div>
+
+<!-- Nhập KEY -->
+<div class="card">
+<input id="vipkey" placeholder="Nhập KEY VIP">
+<br>
+<button onclick="activateVIP()">Kích hoạt VIP</button>
+</div>
+
+<div class="card scan" id="loadingBox" style="display:none;">
     AI đang phân tích: <span id="percent">0</span>%
     <div class="progress">
         <div class="bar" id="bar"></div>
     </div>
-</div><div class="card result" id="result">
-Chưa có kết quả
-</div></div><script>
+</div>
 
+<div class="card result" id="result">
+Chưa có kết quả
+</div>
+
+</div>
+
+<script>
+
+// ===== DANH SÁCH KEY BẠN BÁN =====
+let VALID_KEYS = [
+    "Duk1",
+    "Kim1",
+    "1234"
+];
+
+// ===== KÍCH HOẠT VIP =====
+function activateVIP(){
+    let key = document.getElementById("vipkey").value.trim().toUpperCase();
+
+    if(VALID_KEYS.includes(key)){
+        localStorage.setItem("vip_active","true");
+        alert("Kích hoạt VIP thành công!");
+    }else{
+        alert("Key không hợp lệ!");
+    }
+}
+
+// ===== PHÂN TÍCH =====
 function analyze(mode){
 
     let md5 = document.getElementById("md5").value.trim().toLowerCase();
@@ -180,7 +231,15 @@ function analyze(mode){
         if(progress >= 100){
             clearInterval(interval);
 
+            // ===== KIỂM TRA VIP =====
             if(mode === "vip"){
+                let vip = localStorage.getItem("vip_active");
+                if(vip !== "true"){
+                    result.innerHTML = "⚠️ Chưa kích hoạt VIP<br>Vui lòng nhập KEY.";
+                    robot.classList.remove("active");
+                    robotWrap.classList.remove("active");
+                    return;
+                }
                 showVIP(md5);
             }else{
                 showBasic(md5);
@@ -194,7 +253,6 @@ function analyze(mode){
 
 // ===== VIP PRO =====
 function showVIP(md5){
-
     let hash = 0;
     for(let i=0;i<md5.length;i++){
         hash += md5.charCodeAt(i);
@@ -213,19 +271,10 @@ function showVIP(md5){
 
 // ===== THƯỜNG =====
 function showBasic(md5){
-
     let last = md5[md5.length - 1];
-
     let tai_chars = ['0','2','4','6','8','a','c','e'];
-    let xiu_chars = ['1','3','5','7','9','b','d','f'];
 
-    let resultText = "";
-
-    if(tai_chars.includes(last)){
-        resultText = "TÀI";
-    }else{
-        resultText = "XỈU";
-    }
+    let resultText = tai_chars.includes(last) ? "TÀI" : "XỈU";
 
     document.getElementById("result").innerHTML =
         "Chế độ: THƯỜNG<br><br>" +
@@ -233,5 +282,7 @@ function showBasic(md5){
         "Kết quả: <b>" + resultText + "</b>";
 }
 
-</script></body>
+</script>
+
+</body>
 </html>
