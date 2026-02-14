@@ -1,7 +1,10 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 VIP AI PRO</title><style>
+<title>MD5 VIP AI PRO</title>
+
+<style>
 body{
     margin:0;
     font-family:Arial;
@@ -10,31 +13,215 @@ body{
     text-align:center;
 }
 
-/* HEADER VIP */
+/* Header */
 .header{
-    background:linear-gradient(90deg,#00c853,#00b0ff);
     padding:20px;
-    box-shadow:0 0 15px rgba(0,0,0,0.5);
+    background:linear-gradient(90deg,#00c853,#00e5ff);
 }
 
-/* ROBOT NEON */
+/* Robot */
 .robot{
-    width:80px;
-    filter: drop-shadow(0 0 10px #00e5ff);
-    animation: glow 2s infinite alternate;
+    width:100px;
+    margin-top:10px;
+    animation: glow 2s infinite;
 }
 
+/* Phát sáng */
 @keyframes glow{
-    from{ filter: drop-shadow(0 0 5px #00e5ff); }
-    to{ filter: drop-shadow(0 0 20px #00e5ff); }
+    0%{filter:drop-shadow(0 0 5px #00e5ff);}
+    50%{filter:drop-shadow(0 0 25px #00e5ff);}
+    100%{filter:drop-shadow(0 0 5px #00e5ff);}
 }
 
+/* Khi AI chạy */
+.robot.active{
+    animation: spin 1s linear infinite, glow 1s infinite;
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+/* Container */
 .container{
     padding:20px;
 }
 
 .card{
-    background:#1a1a1a;
+    background:#161616;
+    padding:20px;
+    border-radius:12px;
+    margin-top:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.5);
+}
+
+input{
+    width:90%;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    margin-top:10px;
+    padding:12px 30px;
+    background:#00c853;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+}
+
+/* Loading bar */
+.progress{
+    width:100%;
+    height:12px;
+    background:#222;
+    border-radius:6px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#00c853,#00e5ff);
+}
+
+/* Scan effect */
+.scan{
+    position:relative;
+    overflow:hidden;
+}
+
+.scan::after{
+    content:"";
+    position:absolute;
+    top:-100%;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(transparent,rgba(0,229,255,0.4),transparent);
+    animation: scanMove 2s linear infinite;
+}
+
+@keyframes scanMove{
+    from{top:-100%;}
+    to{top:100%;}
+}
+
+.result{
+    margin-top:15px;
+    line-height:1.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>MD5 VIP AI</h2>
+</div>
+
+<div class="container">
+
+<img id="robot" class="robot"
+src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+
+<div class="card">
+<input id="md5" placeholder="Nhập MD5 (32 ký tự)">
+<br>
+<button onclick="analyze()">Phân tích</button>
+</div>
+
+<div class="card scan" id="loadingBox" style="display:none;">
+    AI đang phân tích: <span id="percent">0</span>%
+    <div class="progress">
+        <div class="bar" id="bar"></div>
+    </div>
+</div>
+
+<div class="card result" id="result">
+Chưa có kết quả
+</div>
+
+</div>
+
+<script>
+
+function analyze(){
+
+    let md5 = document.getElementById("md5").value.trim().toLowerCase();
+    let robot = document.getElementById("robot");
+    let bar = document.getElementById("bar");
+    let percentText = document.getElementById("percent");
+    let loadingBox = document.getElementById("loadingBox");
+    let result = document.getElementById("result");
+
+    if(md5.length != 32){
+        result.innerHTML = "MD5 không hợp lệ";
+        return;
+    }
+
+    // bật hiệu ứng AI
+    robot.classList.add("active");
+    loadingBox.style.display = "block";
+    bar.style.width = "0%";
+    percentText.innerHTML = "0";
+    result.innerHTML = "Đang xử lý dữ liệu AI...";
+
+    let progress = 0;
+
+    let interval = setInterval(function(){
+        progress += Math.floor(Math.random()*8)+3;
+        if(progress > 100) progress = 100;
+
+        bar.style.width = progress + "%";
+        percentText.innerHTML = progress;
+
+        if(progress >= 100){
+            clearInterval(interval);
+            showResult(md5);
+            robot.classList.remove("active");
+        }
+    },120);
+}
+
+function showResult(md5){
+
+    let hash = 0;
+    for(let i=0;i<md5.length;i++){
+        hash += md5.charCodeAt(i);
+    }
+
+    let tai = (hash % 51) + 50;
+    let xiu = 100 - tai;
+    let choose = tai > xiu ? "TÀI" : "XỈU";
+
+    let diff = Math.abs(tai - xiu);
+    let trust;
+    if(diff > 30) trust="Rất cao";
+    else if(diff > 20) trust="Cao";
+    else if(diff > 10) trust="Trung bình";
+    else trust="Thấp";
+
+    let luck_list=["Cực cao","Cao","Trung bình","Thấp"];
+    let luck = luck_list[hash % luck_list.length];
+
+    document.getElementById("result").innerHTML =
+        "Tài: " + tai + "%<br>" +
+        "Xỉu: " + xiu + "%<br><br>" +
+        "Nên chọn: <b>" + choose + "</b><br>" +
+        "Độ tin cậy: " + trust + "<br>" +
+        "May mắn: " + luck;
+}
+
+</script>
+
+</body>
+</html>    background:#1a1a1a;
     padding:20px;
     border-radius:15px;
     margin-top:15px;
