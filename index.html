@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI MD5 VIP PRO</title>
+<title>MD5 VIP AI PRO</title>
 
 <style>
 body{
@@ -15,23 +15,25 @@ body{
 
 /* Header */
 .header{
-    padding:25px;
+    padding:20px;
     background:linear-gradient(90deg,#00c853,#00e5ff);
 }
 
 /* Robot */
 .robot{
-    width:90px;
+    width:100px;
+    margin-top:10px;
     animation: glow 2s infinite;
 }
 
+/* Phát sáng */
 @keyframes glow{
     0%{filter:drop-shadow(0 0 5px #00e5ff);}
     50%{filter:drop-shadow(0 0 25px #00e5ff);}
     100%{filter:drop-shadow(0 0 5px #00e5ff);}
 }
 
-/* Khi phân tích */
+/* Khi AI chạy */
 .robot.active{
     animation: spin 1s linear infinite, glow 1s infinite;
 }
@@ -47,67 +49,72 @@ body{
 }
 
 .card{
-    background:#1a1a1a;
+    background:#161616;
     padding:20px;
-    border-radius:15px;
+    border-radius:12px;
     margin-top:15px;
-    box-shadow:0 0 15px rgba(0,0,0,0.6);
+    box-shadow:0 0 15px rgba(0,0,0,0.5);
 }
 
-/* Input */
 input{
     width:90%;
     padding:14px;
-    border-radius:10px;
     border:none;
-    margin-top:10px;
+    border-radius:8px;
     font-size:16px;
-    outline:none;
 }
 
-/* Button */
 button{
     margin-top:10px;
     padding:12px 30px;
-    background:linear-gradient(90deg,#00c853,#00b0ff);
-    border:none;
+    background:#00c853;
     color:white;
-    border-radius:10px;
+    border:none;
+    border-radius:8px;
     font-size:16px;
-    box-shadow:0 0 10px rgba(0,255,200,0.4);
 }
 
-/* Loading */
-.loading{
-    display:none;
+/* Loading bar */
+.progress{
+    width:100%;
+    height:12px;
+    background:#222;
+    border-radius:6px;
+    overflow:hidden;
     margin-top:15px;
 }
 
 .bar{
-    width:80%;
-    height:10px;
-    background:#333;
-    margin:auto;
-    border-radius:10px;
-    overflow:hidden;
-}
-
-.bar-fill{
     height:100%;
     width:0%;
     background:linear-gradient(90deg,#00c853,#00e5ff);
 }
 
-/* Result */
+/* Scan effect */
+.scan{
+    position:relative;
+    overflow:hidden;
+}
+
+.scan::after{
+    content:"";
+    position:absolute;
+    top:-100%;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(transparent,rgba(0,229,255,0.4),transparent);
+    animation: scanMove 2s linear infinite;
+}
+
+@keyframes scanMove{
+    from{top:-100%;}
+    to{top:100%;}
+}
+
 .result{
     margin-top:15px;
     line-height:1.8;
-    font-size:16px;
-}
-
-.ai{
-    color:#00e5ff;
-    font-weight:bold;
 }
 </style>
 </head>
@@ -115,12 +122,13 @@ button{
 <body>
 
 <div class="header">
-    <img id="robot" class="robot"
-    src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
-    <h2>AI MD5 VIP PRO</h2>
+    <h2>MD5 VIP AI</h2>
 </div>
 
 <div class="container">
+
+<img id="robot" class="robot"
+src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
 
 <div class="card">
 <input id="md5" placeholder="Nhập MD5 (32 ký tự)">
@@ -128,11 +136,11 @@ button{
 <button onclick="analyze()">Phân tích</button>
 </div>
 
-<div class="loading" id="loading">
-AI đang phân tích: <span id="percent">0</span>%
-<div class="bar">
-<div class="bar-fill" id="bar"></div>
-</div>
+<div class="card scan" id="loadingBox" style="display:none;">
+    AI đang phân tích: <span id="percent">0</span>%
+    <div class="progress">
+        <div class="bar" id="bar"></div>
+    </div>
 </div>
 
 <div class="card result" id="result">
@@ -142,13 +150,14 @@ Chưa có kết quả
 </div>
 
 <script>
+
 function analyze(){
 
     let md5 = document.getElementById("md5").value.trim().toLowerCase();
     let robot = document.getElementById("robot");
-    let loading = document.getElementById("loading");
     let bar = document.getElementById("bar");
     let percentText = document.getElementById("percent");
+    let loadingBox = document.getElementById("loadingBox");
     let result = document.getElementById("result");
 
     if(md5.length != 32){
@@ -156,16 +165,17 @@ function analyze(){
         return;
     }
 
+    // bật hiệu ứng AI
     robot.classList.add("active");
-    loading.style.display = "block";
+    loadingBox.style.display = "block";
     bar.style.width = "0%";
     percentText.innerHTML = "0";
-    result.innerHTML = "Đang xử lý AI...";
+    result.innerHTML = "Đang xử lý dữ liệu AI...";
 
     let progress = 0;
 
     let interval = setInterval(function(){
-        progress += Math.floor(Math.random()*8)+5;
+        progress += Math.floor(Math.random()*8)+3;
         if(progress > 100) progress = 100;
 
         bar.style.width = progress + "%";
@@ -201,13 +211,13 @@ function showResult(md5){
     let luck = luck_list[hash % luck_list.length];
 
     document.getElementById("result").innerHTML =
-        "<div class='ai'>AI Phân tích VIP</div><br>" +
         "Tài: " + tai + "%<br>" +
         "Xỉu: " + xiu + "%<br><br>" +
         "Nên chọn: <b>" + choose + "</b><br>" +
         "Độ tin cậy: " + trust + "<br>" +
         "May mắn: " + luck;
 }
+
 </script>
 
 </body>
