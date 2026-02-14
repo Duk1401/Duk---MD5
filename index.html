@@ -1,7 +1,8 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 VIP AI PRO</title><style>
+<title>MD5 VIP AI PRO</title>
+<style>
 body{
     margin:0;
     font-family:Arial;
@@ -24,13 +25,8 @@ body{
 
 .robot{
     width:90px;
-    animation: rotateRobot 6s linear infinite;
+    /* ĐÃ XOÁ XOAY */
     filter: drop-shadow(0 0 15px #00e5ff);
-}
-
-@keyframes rotateRobot{
-    0%{transform:rotate(0deg);}
-    100%{transform:rotate(360deg);}
 }
 
 /* Scan effect */
@@ -107,29 +103,50 @@ button{
     margin-top:15px;
     line-height:1.8;
 }
-</style></head><body><div class="header">
+</style>
+</head>
+<body>
+
+<div class="header">
     <h2>MD5 AI (VIP PRO / THƯỜNG)</h2>
     <div id="vipStatus" style="font-size:14px;margin-top:5px;"></div>
-</div><!-- ROBOT --><div class="robot-box">
+</div>
+
+<!-- ROBOT -->
+<div class="robot-box">
     <img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
     <div class="scan" id="scanEffect" style="display:none;"></div>
-</div><div class="container"><div class="card">
+</div>
+
+<div class="container">
+
+<div class="card">
 <input id="md5" placeholder="Nhập MD5 (32 ký tự)">
 <br>
 <button id="vipBtn" onclick="analyze('vip')">VIP PRO</button>
 <button onclick="analyze('basic')">THƯỜNG</button>
-</div><div class="card" id="keyBox">
+</div>
+
+<div class="card" id="keyBox">
 <input id="vipkey" placeholder="Nhập KEY VIP">
 <br>
 <button onclick="activateVIP()">Kích hoạt VIP</button>
-</div><div class="card" id="loadingBox" style="display:none;">
+</div>
+
+<div class="card" id="loadingBox" style="display:none;">
 AI đang phân tích: <span id="percent">0</span>%
 <div class="progress">
 <div class="bar" id="bar"></div>
 </div>
-</div><div class="card result" id="result">
+</div>
+
+<div class="card result" id="result">
 Chưa có kết quả
-</div></div><script>
+</div>
+
+</div>
+
+<script>
 
 // ===== DANH SÁCH KEY =====
 let VALID_KEYS = [
@@ -254,5 +271,6 @@ document.getElementById("result").innerHTML =
 "Kết quả: <b>" + resultText + "</b>";
 }
 
-</script></body>
+</script>
+</body>
 </html>
