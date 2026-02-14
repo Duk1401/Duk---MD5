@@ -108,7 +108,7 @@ button{
 <body>
 
 <div class="header">
-    <h2>MD5 AI (VIP PRO / THƯỜNG)</h2>
+    <h2>DUK - PHÂN TÍCH MD5</h2>
     <div id="vipStatus" style="font-size:14px;margin-top:5px;"></div>
 </div>
 
@@ -128,9 +128,9 @@ button{
 </div>
 
 <div class="card" id="keyBox">
-<input id="vipkey" placeholder="Nhập KEY VIP">
+<input id="vipkey" placeholder="Nhập KEY">
 <br>
-<button onclick="activateVIP()">Kích hoạt VIP</button>
+<button onclick="activateVIP()">Kích hoạt Key</button>
 </div>
 
 <div class="card" id="loadingBox" style="display:none;">
@@ -150,9 +150,7 @@ Chưa có kết quả
 
 // ===== DANH SÁCH KEY =====
 let VALID_KEYS = [
-"VIP-123456",
-"VIP-ABC999",
-"VIP-PRO2026"
+"DUK-KEYVIP"
 ];
 
 // ===== LOAD TRẠNG THÁI =====
@@ -163,7 +161,7 @@ let vipBtn = document.getElementById("vipBtn");
 let keyBox = document.getElementById("keyBox");
 
 if(vip === "true"){
-status.innerHTML = "Trạng thái: VIP PRO";
+status.innerHTML = "Trạng thái: KEY VIP";
 vipBtn.disabled = false;
 keyBox.style.display = "none";
 }else{
