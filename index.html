@@ -13,126 +13,122 @@ body{
     text-align:center;
 }
 
-/* ===== HEADER ===== */
-.header{
-    padding:20px;
-    background:linear-gradient(90deg,#00c853,#00e5ff);
+/* ===== FIREWORKS ===== */
+#fireworks{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:9999;
 }
 
-/* ===== ROBOT AI ===== */
+/* ===== HEADER ===== */
+.header{
+padding:20px;
+background:linear-gradient(90deg,#00c853,#00e5ff);
+}
+
+/* ===== ROBOT ===== */
 .robot-box{
-    position:fixed;
-    top:120px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:999;
-    transition:all 4s linear;
-    pointer-events:none;
+margin-top:15px;
+position:relative;
 }
 
 .robot{
-    width:90px;
-    filter: drop-shadow(0 0 15px #00e5ff);
-    animation: floatAI 6s ease-in-out infinite;
+width:90px;
+filter: drop-shadow(0 0 15px #00e5ff);
 }
 
-/* Bay nhẹ */
-@keyframes floatAI{
-    0%{ transform:translateY(0px); }
-    50%{ transform:translateY(-10px); }
-    100%{ transform:translateY(0px); }
-}
-
-/* Scan effect */
 .scan{
-    position:absolute;
-    top:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:90px;
-    height:90px;
-    background:linear-gradient(to bottom,transparent,rgba(0,229,255,0.5),transparent);
-    animation: scanMove 2s infinite;
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:90px;
+height:90px;
+background:linear-gradient(to bottom,transparent,rgba(0,229,255,0.5),transparent);
+animation: scanMove 2s infinite;
 }
 
 @keyframes scanMove{
-    0%{top:0;}
-    50%{top:60px;}
-    100%{top:0;}
+0%{top:0;}
+50%{top:60px;}
+100%{top:0;}
 }
 
-/* ===== CONTAINER ===== */
 .container{padding:20px;}
 
 .card{
-    background:#161616;
-    padding:20px;
-    border-radius:12px;
-    margin-top:15px;
-    box-shadow:0 0 15px rgba(0,0,0,0.5);
+background:#161616;
+padding:20px;
+border-radius:12px;
+margin-top:15px;
+box-shadow:0 0 15px rgba(0,0,0,0.5);
 }
 
 .analyzing{
-    box-shadow:0 0 20px #00e5ff,0 0 40px #00e5ff;
+box-shadow:0 0 20px #00e5ff,0 0 40px #00e5ff;
 }
 
 input{
-    width:90%;
-    padding:14px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    margin-top:8px;
+width:90%;
+padding:14px;
+border:none;
+border-radius:8px;
+font-size:16px;
+margin-top:8px;
 }
 
 button{
-    margin:5px;
-    padding:12px 25px;
-    background:linear-gradient(90deg,#00c853,#00e5ff);
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
+margin:5px;
+padding:12px 25px;
+background:linear-gradient(90deg,#00c853,#00e5ff);
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
 }
 
-/* ===== PROGRESS ===== */
 .progress{
-    width:100%;
-    height:12px;
-    background:#222;
-    border-radius:6px;
-    overflow:hidden;
-    margin-top:15px;
+width:100%;
+height:12px;
+background:#222;
+border-radius:6px;
+overflow:hidden;
+margin-top:15px;
 }
 
 .bar{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#00c853,#00e5ff);
-    box-shadow:0 0 10px #00e5ff,0 0 20px #00e5ff;
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00c853,#00e5ff);
+box-shadow:0 0 10px #00e5ff,0 0 20px #00e5ff;
 }
 
 .result{
-    margin-top:15px;
-    line-height:1.8;
+margin-top:15px;
+line-height:1.8;
 }
 </style>
 </head>
+
 <body>
 
+<canvas id="fireworks"></canvas>
+
 <div class="header">
-    <h2>MD5 AI (VIP PRO / THƯỜNG)</h2>
-    <div id="vipStatus" style="font-size:14px;margin-top:5px;"></div>
+<h2>MD5 AI (VIP PRO / THƯỜNG)</h2>
+<div id="vipStatus" style="font-size:14px;margin-top:5px;"></div>
 </div>
 
-<!-- ROBOT -->
-<div class="robot-box" id="robotBox">
-    <img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
-    <div class="scan" id="scanEffect" style="display:none;"></div>
+<div class="robot-box">
+<img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
+<div class="scan" id="scanEffect" style="display:none;"></div>
 </div>
 
 <div class="container">
-
 <div class="card">
 <input id="md5" placeholder="Nhập MD5 (32 ký tự)">
 <br>
@@ -156,38 +152,12 @@ AI đang phân tích: <span id="percent">0</span>%
 <div class="card result" id="result">
 Chưa có kết quả
 </div>
-
 </div>
 
 <script>
+/* ===== VIP SYSTEM ===== */
+let VALID_KEYS = ["VIP-123456","VIP-ABC999","VIP-PRO2026"];
 
-// ===== ROBOT DI CHUYỂN KHẮP MÀN HÌNH =====
-function moveRobotRandom(){
-    let box = document.getElementById("robotBox");
-
-    let maxX = window.innerWidth - 100;
-    let maxY = window.innerHeight - 100;
-
-    let x = Math.random() * maxX;
-    let y = Math.random() * maxY;
-
-    box.style.left = x + "px";
-    box.style.top = y + "px";
-}
-
-// di chuyển mỗi 5 giây
-setInterval(moveRobotRandom, 5000);
-window.addEventListener("load", moveRobotRandom);
-
-
-// ===== DANH SÁCH KEY =====
-let VALID_KEYS = [
-"VIP-123456",
-"VIP-ABC999",
-"VIP-PRO2026"
-];
-
-// ===== LOAD TRẠNG THÁI =====
 window.onload = function(){
 let vip = localStorage.getItem("vip_active");
 let status = document.getElementById("vipStatus");
@@ -203,15 +173,10 @@ status.innerHTML = "Trạng thái: Miễn phí";
 vipBtn.disabled = true;
 vipBtn.style.opacity = "0.5";
 }
-
-// chạy robot ngay khi load
-moveRobotRandom();
 }
 
-// ===== KÍCH HOẠT VIP =====
 function activateVIP(){
 let key = document.getElementById("vipkey").value.trim().toUpperCase();
-
 if(VALID_KEYS.includes(key)){
 localStorage.setItem("vip_active","true");
 alert("Kích hoạt VIP thành công!");
@@ -221,9 +186,7 @@ alert("Key không hợp lệ!");
 }
 }
 
-// ===== PHÂN TÍCH =====
 function analyze(mode){
-
 let md5 = document.getElementById("md5").value.trim().toLowerCase();
 let bar = document.getElementById("bar");
 let percentText = document.getElementById("percent");
@@ -266,17 +229,6 @@ clearInterval(interval);
 scan.style.display = "none";
 cards.forEach(c=>c.classList.remove("analyzing"));
 
-if(mode === "vip"){
-showVIP(md5);
-}else{
-showBasic(md5);
-}
-}
-},120);
-}
-
-// ===== VIP =====
-function showVIP(md5){
 let hash = 0;
 for(let i=0;i<md5.length;i++){
 hash += md5.charCodeAt(i);
@@ -286,26 +238,68 @@ let tai = (hash % 51) + 50;
 let xiu = 100 - tai;
 let choose = tai > xiu ? "TÀI" : "XỈU";
 
-document.getElementById("result").innerHTML =
-"Chế độ: VIP PRO<br><br>" +
+result.innerHTML =
+"Chế độ: " + (mode==="vip"?"VIP PRO":"THƯỜNG") + "<br><br>" +
 "Tài: " + tai + "%<br>" +
 "Xỉu: " + xiu + "%<br><br>" +
 "Nên chọn: <b>" + choose + "</b>";
 }
-
-// ===== BASIC =====
-function showBasic(md5){
-let last = md5[md5.length - 1];
-let tai_chars = ['0','2','4','6','8','a','c','e'];
-
-let resultText = tai_chars.includes(last) ? "TÀI" : "XỈU";
-
-document.getElementById("result").innerHTML =
-"Chế độ: THƯỜNG<br><br>" +
-"Ký tự cuối: <b>" + last + "</b><br>" +
-"Kết quả: <b>" + resultText + "</b>";
+},120);
 }
 
+/* ===== FIREWORKS 3D ===== */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+resize();
+window.onresize = resize;
+
+let particles = [];
+
+function createFirework(){
+let x = Math.random()*canvas.width;
+let y = Math.random()*canvas.height/2;
+let colors = ["#00e5ff","#00ff9c","#ffffff","#66ffcc"];
+
+for(let i=0;i<25;i++){
+particles.push({
+x:x,
+y:y,
+angle:Math.random()*Math.PI*2,
+speed:Math.random()*4+1,
+life:60,
+color:colors[Math.floor(Math.random()*colors.length)]
+});
+}
+}
+
+function update(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+for(let i=particles.length-1;i>=0;i--){
+let p = particles[i];
+p.x += Math.cos(p.angle)*p.speed;
+p.y += Math.sin(p.angle)*p.speed;
+p.life--;
+
+ctx.beginPath();
+ctx.arc(p.x,p.y,2,0,Math.PI*2);
+ctx.fillStyle = p.color;
+ctx.fill();
+
+if(p.life<=0) particles.splice(i,1);
+}
+
+requestAnimationFrame(update);
+}
+
+setInterval(createFirework,800);
+update();
 </script>
+
 </body>
 </html>
