@@ -1,44 +1,42 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 VIP AI PRO</title>
-<style>
+<title>AI SAO789 AUTO</title><style>
 body{
     margin:0;
     font-family:Arial;
-    background:#0b0b0b;
+    background:#000;
     color:white;
     text-align:center;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header{
-    padding:20px;
+    padding:15px;
     background:linear-gradient(90deg,#00c853,#00e5ff);
 }
 
-/* ===== ROBOT AI ===== */
+/* ROBOT */
 .robot-box{
-    margin-top:15px;
     position:relative;
+    margin-top:15px;
 }
 
 .robot{
     width:90px;
-    /* ĐÃ XOÁ XOAY */
-    filter: drop-shadow(0 0 15px #00e5ff);
+    filter:drop-shadow(0 0 15px #00e5ff);
 }
 
 /* Scan effect */
 .scan{
     position:absolute;
-    top:0;
     left:50%;
     transform:translateX(-50%);
     width:90px;
     height:90px;
-    background:linear-gradient(to bottom,transparent,rgba(0,229,255,0.5),transparent);
-    animation: scanMove 2s infinite;
+    background:linear-gradient(to bottom,transparent,rgba(0,229,255,0.6),transparent);
+    animation:scanMove 2s infinite;
+    display:none;
 }
 
 @keyframes scanMove{
@@ -47,49 +45,40 @@ body{
     100%{top:0;}
 }
 
-/* ===== CONTAINER ===== */
-.container{padding:20px;}
+/* BOX */
+.container{padding:15px;}
 
 .card{
-    background:#161616;
-    padding:20px;
-    border-radius:12px;
-    margin-top:15px;
-    box-shadow:0 0 15px rgba(0,0,0,0.5);
+    background:#111;
+    padding:18px;
+    border-radius:14px;
+    margin-top:12px;
+    box-shadow:0 0 15px rgba(0,229,255,0.2);
 }
 
-/* Glow when analyzing */
 .analyzing{
     box-shadow:0 0 20px #00e5ff,0 0 40px #00e5ff;
 }
 
-input{
-    width:90%;
-    padding:14px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    margin-top:8px;
-}
-
+/* BUTTON */
 button{
-    margin:5px;
     padding:12px 25px;
+    margin:5px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
     background:linear-gradient(90deg,#00c853,#00e5ff);
     color:white;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
 }
 
-/* ===== PROGRESS ===== */
+/* PROGRESS */
 .progress{
     width:100%;
     height:12px;
     background:#222;
     border-radius:6px;
     overflow:hidden;
-    margin-top:15px;
+    margin-top:10px;
 }
 
 .bar{
@@ -100,175 +89,132 @@ button{
 }
 
 .result{
-    margin-top:15px;
-    line-height:1.8;
+    margin-top:10px;
+    font-size:18px;
+    line-height:1.6;
 }
-</style>
-</head>
-<body>
-
-<div class="header">
-    <h2>DUK - PHÂN TÍCH MD5</h2>
-    <div id="vipStatus" style="font-size:14px;margin-top:5px;"></div>
-</div>
-
-<!-- ROBOT -->
-<div class="robot-box">
+</style></head><body><div class="header">
+    <h2>AI SAO789 (VIP / THƯỜNG)</h2>
+    <div id="vipStatus"></div>
+</div><div class="robot-box">
     <img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
-    <div class="scan" id="scanEffect" style="display:none;"></div>
-</div>
-
-<div class="container">
-
-<div class="card">
-<input id="md5" placeholder="Nhập MD5 (32 ký tự)">
+    <div class="scan" id="scan"></div>
+</div><div class="container"><div class="card">
+<input id="vipkey" placeholder="Nhập KEY VIP" style="width:90%;padding:10px;border-radius:8px;border:none;">
 <br>
-<button id="vipBtn" onclick="analyze('vip')">VIP</button>
-<button onclick="analyze('basic')">THƯỜNG</button>
-</div>
-
-<div class="card" id="keyBox">
-<input id="vipkey" placeholder="Nhập KEY">
-<br>
-<button onclick="activateVIP()">Kích hoạt Key</button>
-</div>
-
-<div class="card" id="loadingBox" style="display:none;">
-AI đang phân tích: <span id="percent">0</span>%
-<div class="progress">
+<button onclick="activateVIP()">Kích hoạt VIP</button>
+</div><div class="card">
+<button onclick="startAuto()">Bắt đầu</button>
+<button onclick="stopAuto()">Dừng</button>
+</div><div class="card">
+Phiên: <b id="session">0</b><div class="progress">
 <div class="bar" id="bar"></div>
-</div>
-</div>
+</div><div class="result" id="result">
+Chưa chạy
+</div></div></div><script>
 
-<div class="card result" id="result">
-Chưa có kết quả
-</div>
+/* ===== VIP ===== */
+let VALID_KEYS = ["VIP-123","VIP-789","VIP-PRO"];
 
-</div>
-
-<script>
-
-// ===== DANH SÁCH KEY =====
-let VALID_KEYS = [
-"DUK-KEYVIP"
-];
-
-// ===== LOAD TRẠNG THÁI =====
 window.onload = function(){
-let vip = localStorage.getItem("vip_active");
-let status = document.getElementById("vipStatus");
-let vipBtn = document.getElementById("vipBtn");
-let keyBox = document.getElementById("keyBox");
-
-if(vip === "true"){
-status.innerHTML = "Trạng thái: KEY VIP";
-vipBtn.disabled = false;
-keyBox.style.display = "none";
-}else{
-status.innerHTML = "Trạng thái: Miễn phí";
-vipBtn.disabled = true;
-vipBtn.style.opacity = "0.5";
-}
+    if(localStorage.getItem("vip")=="true"){
+        document.getElementById("vipStatus").innerHTML="Trạng thái: VIP";
+    }else{
+        document.getElementById("vipStatus").innerHTML="Trạng thái: Thường";
+    }
 }
 
-// ===== KÍCH HOẠT VIP =====
 function activateVIP(){
-let key = document.getElementById("vipkey").value.trim().toUpperCase();
-
-if(VALID_KEYS.includes(key)){
-localStorage.setItem("vip_active","true");
-alert("Kích hoạt VIP thành công!");
-location.reload();
-}else{
-alert("Key không hợp lệ!");
-}
-}
-
-// ===== PHÂN TÍCH =====
-function analyze(mode){
-
-let md5 = document.getElementById("md5").value.trim().toLowerCase();
-let bar = document.getElementById("bar");
-let percentText = document.getElementById("percent");
-let loadingBox = document.getElementById("loadingBox");
-let result = document.getElementById("result");
-let scan = document.getElementById("scanEffect");
-let cards = document.querySelectorAll(".card");
-
-if(md5.length != 32){
-result.innerHTML = "MD5 không hợp lệ";
-return;
+    let key=document.getElementById("vipkey").value.trim().toUpperCase();
+    if(VALID_KEYS.includes(key)){
+        localStorage.setItem("vip","true");
+        alert("Kích hoạt VIP thành công");
+        location.reload();
+    }else{
+        alert("Key sai");
+    }
 }
 
-if(mode === "vip"){
-let vip = localStorage.getItem("vip_active");
-if(vip !== "true"){
-result.innerHTML = "⚠️ Chưa kích hoạt VIP";
-return;
-}
-}
+/* ===== AUTO BOT ===== */
+let session=1000;
+let autoInterval=null;
 
-loadingBox.style.display = "block";
-scan.style.display = "block";
-bar.style.width = "0%";
-percentText.innerHTML = "0";
-result.innerHTML = "AI đang quét dữ liệu...";
-cards.forEach(c=>c.classList.add("analyzing"));
-
-let progress = 0;
-
-let interval = setInterval(function(){
-progress += Math.floor(Math.random()*8)+3;
-if(progress > 100) progress = 100;
-
-bar.style.width = progress + "%";
-percentText.innerHTML = progress;
-
-if(progress >= 100){
-clearInterval(interval);
-scan.style.display = "none";
-cards.forEach(c=>c.classList.remove("analyzing"));
-
-if(mode === "vip"){
-showVIP(md5);
-}else{
-showBasic(md5);
-}
-}
-},120);
+function startAuto(){
+    if(autoInterval) return;
+    runSession();
+    autoInterval=setInterval(runSession,5000);
 }
 
-// ===== VIP =====
-function showVIP(md5){
-let hash = 0;
-for(let i=0;i<md5.length;i++){
-hash += md5.charCodeAt(i);
+function stopAuto(){
+    clearInterval(autoInterval);
+    autoInterval=null;
 }
 
-let tai = (hash % 51) + 50;
-let xiu = 100 - tai;
-let choose = tai > xiu ? "TÀI" : "XỈU";
-
-document.getElementById("result").innerHTML =
-"Chế độ: VIP PRO<br><br>" +
-"Tài: " + tai + "%<br>" +
-"Xỉu: " + xiu + "%<br><br>" +
-"Nên chọn: <b>" + choose + "</b>";
+/* ===== TẠO MD5 GIẢ ===== */
+function fakeMD5(){
+    let chars="abcdef0123456789";
+    let md5="";
+    for(let i=0;i<32;i++){
+        md5+=chars[Math.floor(Math.random()*chars.length)];
+    }
+    return md5;
 }
 
-// ===== BASIC =====
-function showBasic(md5){
-let last = md5[md5.length - 1];
-let tai_chars = ['0','2','4','6','8','a','c','e'];
+/* ===== PHÂN TÍCH ===== */
+function runSession(){
 
-let resultText = tai_chars.includes(last) ? "TÀI" : "XỈU";
+    session++;
+    document.getElementById("session").innerHTML=session;
 
-document.getElementById("result").innerHTML =
-"Chế độ: THƯỜNG<br><br>" +
-"Ký tự cuối: <b>" + last + "</b><br>" +
-"Kết quả: <b>" + resultText + "</b>";
+    let scan=document.getElementById("scan");
+    let bar=document.getElementById("bar");
+    let result=document.getElementById("result");
+    let card=document.querySelectorAll(".card");
+
+    scan.style.display="block";
+    card.forEach(c=>c.classList.add("analyzing"));
+
+    let progress=0;
+
+    let loading=setInterval(()=>{
+        progress+=10;
+        bar.style.width=progress+"%";
+
+        if(progress>=100){
+            clearInterval(loading);
+            scan.style.display="none";
+            card.forEach(c=>c.classList.remove("analyzing"));
+
+            analyzeResult(fakeMD5());
+        }
+    },100);
 }
 
-</script>
-</body>
+/* ===== LOGIC DỰ ĐOÁN ===== */
+function analyzeResult(md5){
+
+    let vip = localStorage.getItem("vip")=="true";
+
+    let hash=0;
+    for(let i=0;i<md5.length;i++){
+        hash+=md5.charCodeAt(i);
+    }
+
+    let tai=(hash%51)+50;
+    let xiu=100-tai;
+    let choose=tai>xiu?"TÀI":"XỈU";
+
+    if(vip){
+        document.getElementById("result").innerHTML=
+        "Chế độ: VIP<br>"+
+        "Tài: "+tai+"% | Xỉu: "+xiu+"%<br>"+
+        "Dự báo: <b>"+choose+"</b>";
+    }else{
+        document.getElementById("result").innerHTML=
+        "Chế độ: Thường<br>"+
+        "Dự báo: <b>"+choose+"</b>";
+    }
+}
+
+</script></body>
 </html>
