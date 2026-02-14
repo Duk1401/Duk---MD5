@@ -1,50 +1,179 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VIP Tool</title>
-<style>
-body {
-    font-family: Arial;
-    text-align: center;
-    background: #111;
-    color: white;
-    padding: 20px;
+<title>MD5 VIP AI PRO</title><style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0b0b0b;
+    color:white;
+    text-align:center;
 }
-input {
-    padding: 10px;
-    width: 90%;
-    margin: 10px;
+
+/* HEADER VIP */
+.header{
+    background:linear-gradient(90deg,#00c853,#00b0ff);
+    padding:20px;
+    box-shadow:0 0 15px rgba(0,0,0,0.5);
 }
-button {
-    padding: 10px 20px;
-    background: #00c853;
-    color: white;
-    border: none;
+
+/* ROBOT NEON */
+.robot{
+    width:80px;
+    filter: drop-shadow(0 0 10px #00e5ff);
+    animation: glow 2s infinite alternate;
 }
-.box {
-    background: #222;
-    padding: 15px;
-    margin-top: 20px;
+
+@keyframes glow{
+    from{ filter: drop-shadow(0 0 5px #00e5ff); }
+    to{ filter: drop-shadow(0 0 20px #00e5ff); }
 }
-</style>
-</head>
-<body><h2>VIP MD5 Tool</h2><input id="md5" placeholder="Nhập MD5"><br>
-<button onclick="check()">Phân tích</button><div class="box" id="result">Chưa có kết quả</div><script>
-function check(){
-    let md5 = document.getElementById("md5").value.trim();
+
+.container{
+    padding:20px;
+}
+
+.card{
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:15px;
+    margin-top:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.6);
+}
+
+/* INPUT */
+input{
+    width:90%;
+    padding:14px;
+    border-radius:10px;
+    border:none;
+    margin-top:10px;
+    font-size:16px;
+    outline:none;
+}
+
+/* BUTTON VIP */
+button{
+    margin-top:10px;
+    padding:12px 30px;
+    background:linear-gradient(90deg,#00c853,#00b0ff);
+    border:none;
+    color:white;
+    border-radius:10px;
+    font-size:16px;
+    box-shadow:0 0 10px rgba(0,255,200,0.4);
+}
+
+/* RESULT */
+.result{
+    margin-top:15px;
+    line-height:1.8;
+    font-size:16px;
+    opacity:0;
+    transition:0.5s;
+}
+
+/* LOADING */
+.loading{
+    display:none;
+    margin-top:15px;
+}
+
+.bar{
+    width:80%;
+    height:8px;
+    background:#333;
+    margin:auto;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.bar-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#00c853,#00e5ff);
+    animation:load 2s linear forwards;
+}
+
+@keyframes load{
+    from{width:0%;}
+    to{width:100%;}
+}
+
+.ai{
+    color:#00e5ff;
+    font-weight:bold;
+}
+</style></head><body><!-- HEADER --><div class="header">
+    <img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+    <h2>AI MD5 VIP PRO</h2>
+</div><div class="container"><div class="card">
+<input id="md5" placeholder="Nhập MD5 (32 ký tự)">
+<br>
+<button onclick="analyze()">Phân tích AI</button><!-- LOADING --><div class="loading" id="loading">
+    <p>AI đang phân tích...</p>
+    <div class="bar">
+        <div class="bar-fill"></div>
+    </div>
+</div></div><div class="card result" id="result">
+Chưa có dữ liệu
+</div></div><script>
+function analyze(){
+
+    let md5 = document.getElementById("md5").value.trim().toLowerCase();
+    let resultBox = document.getElementById("result");
+    let loading = document.getElementById("loading");
 
     if(md5.length != 32){
-        document.getElementById("result").innerHTML = "MD5 không hợp lệ";
+        resultBox.innerHTML = "MD5 không hợp lệ";
+        resultBox.style.opacity = 1;
         return;
     }
 
-    let last = md5.slice(-1).toLowerCase();
-    let tai_chars = "02468ace";
+    // Ẩn kết quả, hiện loading
+    resultBox.style.opacity = 0;
+    loading.style.display = "block";
 
-    let result = tai_chars.includes(last) ? "TÀI" : "XỈU";
+    // Giả lập AI xử lý 2 giây
+    setTimeout(() => {
 
-    document.getElementById("result").innerHTML =
-        "Kết quả: " + result;
+        // ===== HASH ỔN ĐỊNH =====
+        let hash = 0;
+        for(let i=0;i<md5.length;i++){
+            hash = (hash * 31 + md5.charCodeAt(i)) % 100000;
+        }
+
+        // ===== % KHÔNG ĐỔI =====
+        let tai = (hash % 51) + 50;
+        let xiu = 100 - tai;
+
+        let choose = tai > xiu ? "TÀI" : "XỈU";
+
+        // ===== MAY MẮN =====
+        let luck_list = ["Cực cao","Rất cao","Cao","Trung bình","Thấp"];
+        let luck = luck_list[hash % luck_list.length];
+
+        // ===== ĐỘ TIN CẬY =====
+        let diff = Math.abs(tai - xiu);
+        let trust;
+        if(diff > 30) trust = "Rất cao";
+        else if(diff > 20) trust = "Cao";
+        else if(diff > 10) trust = "Trung bình";
+        else trust = "Thấp";
+
+        // Hiển thị
+        loading.style.display = "none";
+        resultBox.innerHTML =
+        "<div class='ai'>AI Phân tích VIP</div><br>" +
+        "Tài: " + tai + "%<br>" +
+        "Xỉu: " + xiu + "%<br><br>" +
+        "Nên chọn: <b>" + choose + "</b><br>" +
+        "Độ tin cậy: " + trust + "<br>" +
+        "May mắn: " + luck;
+
+        resultBox.style.opacity = 1;
+
+    }, 2000);
 }
 </script></body>
 </html>
