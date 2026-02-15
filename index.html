@@ -1,78 +1,103 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 AI VIP PRO</title>
-
-<style>
-/* =====================
-   BACKGROUND PRO
-===================== */
+<title>MD5 VIP PRO</title><style>
 body{
 margin:0;
 font-family:Arial;
 color:white;
 text-align:center;
-overflow-x:hidden;
-
-background:
-radial-gradient(circle at 20% 20%, rgba(0,229,255,0.15), transparent 40%),
-radial-gradient(circle at 80% 80%, rgba(0,255,156,0.12), transparent 40%),
-linear-gradient(180deg,#050505,#0b0b0b 40%,#050505);
+background:#050505;
+overflow:hidden;
 }
 
-/* grid tech */
-body::before{
-content:"";
+/* ===== FIREWORK CANVAS ===== */
+#fireworks{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-background-image:
-linear-gradient(rgba(0,229,255,0.05) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0,229,255,0.05) 1px, transparent 1px);
-background-size:40px 40px;
-z-index:-1;
+z-index:0;
+pointer-events:none;
 }
 
-/* light animation */
-body::after{
-content:"";
-position:fixed;
-top:-50%;
-left:-50%;
-width:200%;
-height:200%;
-background: radial-gradient(circle, rgba(0,229,255,0.08), transparent 60%);
-animation: moveLight 12s linear infinite;
-z-index:-2;
+/* ===== TITLE NEON ===== */
+.title{
+margin-top:15px;
+font-size:40px;
+font-weight:bold;
+background:linear-gradient(90deg,#00e5ff,#00ff9c,#ffffff,#00e5ff);
+background-size:300%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:shine 6s linear infinite;
+text-shadow:0 0 25px rgba(0,229,255,0.8);
 }
 
-@keyframes moveLight{
-0%{transform:translate(0,0);}
-50%{transform:translate(25%,25%);}
-100%{transform:translate(0,0);}
+@keyframes shine{
+0%{background-position:0%}
+100%{background-position:300%}
 }
 
-/* =====================
-   UI
-===================== */
+/* ===== ROBOT GLOW ===== */
+.robot-box{
+position:relative;
+margin-top:10px;
+}
 
-.header{
+.robot{
+width:100px;
+filter:
+drop-shadow(0 0 10px #00e5ff)
+drop-shadow(0 0 20px #00e5ff)
+drop-shadow(0 0 40px rgba(0,229,255,0.6));
+animation:robotGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes robotGlow{
+from{filter:drop-shadow(0 0 10px #00e5ff);}
+to{filter:drop-shadow(0 0 35px #00e5ff);}
+}
+
+/* ===== AI SCAN EFFECT ===== */
+.scan{
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:100px;
+height:100px;
+background:linear-gradient(to bottom,transparent,rgba(0,229,255,0.6),transparent);
+animation:scanMove 2s infinite;
+display:none;
+}
+
+@keyframes scanMove{
+0%{top:0;}
+50%{top:70px;}
+100%{top:0;}
+}
+
+/* ===== STATUS ===== */
+.status{
+margin-top:5px;
+font-size:14px;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+position:relative;
+z-index:2;
 padding:20px;
-background:linear-gradient(90deg,#00c853,#00e5ff);
-box-shadow:0 0 20px rgba(0,229,255,0.4);
 }
-
-.container{padding:20px;}
 
 .card{
 background:#111;
 padding:20px;
 border-radius:14px;
 margin-top:15px;
-box-shadow:0 0 20px rgba(0,229,255,0.15);
+box-shadow:0 0 20px rgba(0,229,255,0.2);
 }
 
 input{
@@ -81,7 +106,6 @@ padding:14px;
 border:none;
 border-radius:8px;
 font-size:16px;
-margin-top:8px;
 background:#1b1b1b;
 color:white;
 }
@@ -117,49 +141,30 @@ box-shadow:0 0 10px #00e5ff;
 margin-top:15px;
 line-height:1.8;
 }
-</style>
-</head>
+</style></head><body><canvas id="fireworks"></canvas>
 
-<body>
-
-<div class="header">
-<h2>MD5 AI (VIP PRO)</h2>
-<div id="vipStatus"></div>
-</div>
-
-<div class="container">
-
-<div class="card">
+<div class="container"><div class="title">MD5 VIP AI PRO</div>
+<div id="vipStatus" class="status"></div><!-- ROBOT --><div class="robot-box">
+<img class="robot" src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
+<div class="scan" id="scanEffect"></div>
+</div><div class="card">
 <input id="md5" placeholder="Nhập MD5 (32 ký tự)">
 <br>
 <button id="vipBtn" onclick="analyze('vip')">VIP PRO</button>
 <button onclick="analyze('basic')">THƯỜNG</button>
-</div>
-
-<div class="card" id="keyBox">
+</div><div class="card" id="keyBox">
 <input id="vipkey" placeholder="Nhập KEY VIP">
 <br>
 <button onclick="activateVIP()">Kích hoạt VIP</button>
-</div>
-
-<div class="card" id="loadingBox" style="display:none;">
+</div><div class="card" id="loadingBox" style="display:none;">
 AI đang phân tích: <span id="percent">0</span>%
 <div class="progress">
 <div class="bar" id="bar"></div>
 </div>
-</div>
-
-<div class="card result" id="result">
+</div><div class="card result" id="result">
 Chưa có kết quả
-</div>
-
-</div>
-
-<script>
-/* =====================
-   VIP SYSTEM
-===================== */
-
+</div></div><script>
+/* ===== VIP ===== */
 let VALID_KEYS = ["VIP-123456","VIP-PRO2026"];
 
 window.onload = function(){
@@ -170,7 +175,6 @@ let keyBox = document.getElementById("keyBox");
 
 if(vip === "true"){
 status.innerHTML = "Trạng thái: VIP PRO";
-vipBtn.disabled = false;
 keyBox.style.display = "none";
 }else{
 status.innerHTML = "Trạng thái: Miễn phí";
@@ -190,10 +194,7 @@ alert("Key không hợp lệ!");
 }
 }
 
-/* =====================
-   ANALYZE
-===================== */
-
+/* ===== ANALYZE ===== */
 function analyze(mode){
 
 let md5 = document.getElementById("md5").value.trim().toLowerCase();
@@ -201,111 +202,99 @@ let bar = document.getElementById("bar");
 let percentText = document.getElementById("percent");
 let loadingBox = document.getElementById("loadingBox");
 let result = document.getElementById("result");
+let scan = document.getElementById("scanEffect");
 
 if(md5.length !== 32){
 result.innerHTML = "MD5 không hợp lệ";
 return;
 }
 
-if(mode === "vip"){
-let vip = localStorage.getItem("vip_active");
-if(vip !== "true"){
+if(mode==="vip" && localStorage.getItem("vip_active")!=="true"){
 alert("Bạn chưa kích hoạt VIP!");
 return;
 }
-}
 
-loadingBox.style.display = "block";
-bar.style.width = "0%";
-percentText.innerHTML = "0";
-result.innerHTML = "AI đang quét dữ liệu...";
+/* bật scan */
+scan.style.display="block";
+loadingBox.style.display="block";
 
-let progress = 0;
+let progress=0;
 
-let interval = setInterval(function(){
-progress += Math.floor(Math.random()*8)+4;
-if(progress > 100) progress = 100;
+let interval=setInterval(()=>{
+progress+=Math.floor(Math.random()*8)+4;
+if(progress>100)progress=100;
 
-bar.style.width = progress + "%";
-percentText.innerHTML = progress;
+bar.style.width=progress+"%";
+percentText.innerHTML=progress;
 
-if(progress >= 100){
+if(progress>=100){
 clearInterval(interval);
-loadingBox.style.display = "none";
+loadingBox.style.display="none";
+scan.style.display="none";
 
-if(mode === "vip"){
-showVIP(md5);
-}else{
-showBasic(md5);
-}
+/* thuật toán */
+let last = md5[31];
+let tai_chars=['0','2','4','6','8','a','c','e'];
+let resultText = tai_chars.includes(last)?"TÀI":"XỈU";
+
+result.innerHTML =
+"<b>"+(mode==="vip"?"VIP PRO":"THƯỜNG")+"</b><br><br>" +
+"Kết quả: <b>"+resultText+"</b>";
 }
 },120);
 }
 
-/* =====================
-   BASIC
-===================== */
-function showBasic(md5){
-let last = md5[31];
-let tai_chars = ['0','2','4','6','8','a','c','e'];
-let resultText = tai_chars.includes(last) ? "TÀI" : "XỈU";
+/* ===== FIREWORKS ===== */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
 
-document.getElementById("result").innerHTML =
-"<b>Chế độ: THƯỜNG</b><br>" +
-"Ký tự cuối: "+last+"<br>" +
-"Kết quả: <b>"+resultText+"</b>";
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+resize();
+window.onresize=resize;
+
+let particles=[];
+
+function createFirework(){
+let x=Math.random()*canvas.width;
+let y=Math.random()*canvas.height/2;
+let colors=["#00e5ff","#00ff9c","#ffffff"];
+
+for(let i=0;i<30;i++){
+particles.push({
+x:x,
+y:y,
+angle:Math.random()*Math.PI*2,
+speed:Math.random()*4+1,
+life:60,
+color:colors[Math.floor(Math.random()*colors.length)]
+});
+}
 }
 
-/* =====================
-   VIP PRO ENGINE
-===================== */
-function showVIP(md5){
+function update(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
 
-let last_char = md5[31];
-let tai_chars = ['0','2','4','6','8','a','c','e'];
+for(let i=particles.length-1;i>=0;i--){
+let p=particles[i];
+p.x+=Math.cos(p.angle)*p.speed;
+p.y+=Math.sin(p.angle)*p.speed;
+p.life--;
 
-let score = 0;
+ctx.beginPath();
+ctx.arc(p.x,p.y,2,0,Math.PI*2);
+ctx.fillStyle=p.color;
+ctx.fill();
 
-/* lớp 1 */
-if(tai_chars.includes(last_char)) score += 30;
-else score -= 30;
-
-/* lớp 2 */
-let sum = 0;
-for(let i=0;i<32;i++){
-sum += parseInt(md5[i],16);
+if(p.life<=0)particles.splice(i,1);
 }
 
-if(sum % 2 === 0) score += 15;
-else score -= 15;
-
-/* lớp 3 */
-let tail = md5.slice(28);
-let tail_sum = 0;
-for(let i=0;i<4;i++){
-tail_sum += parseInt(tail[i],16);
+requestAnimationFrame(update);
 }
 
-if(tail_sum >= 32) score += 20;
-else score -= 20;
-
-/* lớp 4 */
-let base = sum % 20;
-let tai_percent = 50 + score + base;
-
-if(tai_percent > 94) tai_percent = 94;
-if(tai_percent < 6) tai_percent = 6;
-
-let xiu_percent = 100 - tai_percent;
-let choose = tai_percent > xiu_percent ? "TÀI" : "XỈU";
-
-document.getElementById("result").innerHTML =
-"<div style='color:#00ff9c;font-size:18px'><b>VIP PRO AI</b></div><br>" +
-"Tài: "+tai_percent+"%<br>" +
-"Xỉu: "+xiu_percent+"%<br><br>" +
-"<div style='font-size:20px'>AI khuyến nghị: <b>"+choose+"</b></div>";
-}
-</script>
-
-</body>
+setInterval(createFirework,800);
+update();
+</script></body>
 </html>
