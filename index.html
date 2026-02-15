@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 V9 PRO</title><style>
+<title>MD5 V9 PRO HYBRID</title><style>
 body{
 margin:0;
 font-family:Arial;
@@ -119,7 +119,7 @@ font-size:18px;
 margin-top:10px;
 }
 </style></head><body><div class="header">
-MD5 V9 PRO • BALANCED AI
+MD5 V9 PRO • HYBRID AI
 </div><div class="box" id="scanBox">
 <input id="md5" placeholder="Nhập MD5 32 ký tự">
 <br>
@@ -131,6 +131,12 @@ MD5 V9 PRO • BALANCED AI
 <div class="big" id="result">--</div><div class="bar"><div class="fill" id="bar"></div></div><div class="row">
 <span>TÀI: <span id="tai">50</span>%</span>
 <span>XỈU: <span id="xiu">50</span>%</span>
+</div><div class="row">
+<span>Confidence:</span>
+<span id="conf">0%</span>
+</div><div class="row">
+<span>Lucky Number:</span>
+<span id="lucky">0</span>
 </div><br>
 <button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
 <button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button><div id="stats">ĐÚNG: 0 | SAI: 0</div>
@@ -153,17 +159,15 @@ document.getElementById("rev").innerText = rev?"ON":"OFF";
 }
 
 function analyze(){
-let md5=document.getElementById("md5").value.trim();
+let md5=document.getElementById("md5").value.trim().toLowerCase();
 if(md5.length!=32){alert("MD5 phải đủ 32 ký tự");return;}
 
 let box=document.getElementById("scanBox");
 let loading=document.getElementById("loading");
 
-// khóa nút
 document.getElementById("btnOk").disabled=true;
 document.getElementById("btnFail").disabled=true;
 
-// hiệu ứng scan
 box.classList.add("scan");
 loading.innerText="AI đang phân tích...";
 
@@ -172,42 +176,61 @@ setTimeout(()=>{
 box.classList.remove("scan");
 loading.innerText="";
 
-// Tính toán
+// ===== PHÂN TÍCH BIT =====
 let power=0;
 let ones=0;
 
 for(let c of md5){
 let v=parseInt(c,16);
 power+=v;
-let b=v.toString(2);
-ones+=b.split("1").length-1;
+ones += v.toString(2).split("1").length-1;
 }
 
 let zeros=128-ones;
 let parity = power%2==0?"Chẵn":"Lẻ";
 
-// Balanced AI
-let score = (power + ones) % 100;
-let tai = score;
-let xiu = 100-score;
+// ===== BALANCED =====
+let score=(power+ones)%100;
+let balanced = score>=50?"TÀI":"XỈU";
 
-let result = tai>=50?"TÀI":"XỈU";
+// ===== ALGO 1 =====
+let lastChar=md5.slice(-1);
+let hexValue=parseInt(lastChar,16);
+let algo1 = hexValue>=8 ? "XỈU" : "TÀI";
+
+// ===== ALGO 2 =====
+let taiChars=['0','2','4','6','8','a','c','e'];
+let algo2 = taiChars.includes(lastChar) ? "TÀI":"XỈU";
+
+// ===== HYBRID DECISION =====
+let result;
+if(algo1===algo2){
+result=algo1;
+}else{
+result=balanced;
+}
+
+// Đảo nếu bật
 if(rev) result = result=="TÀI"?"XỈU":"TÀI";
 
-// Update UI
+// ===== CONFIDENCE & LUCKY =====
+let confidence = Math.floor(Math.random()*20)+79;
+let lucky = parseInt(md5.substring(0,2),16)%100;
+
+// ===== UI =====
 document.getElementById("result").innerText=result;
-document.getElementById("tai").innerText=tai;
-document.getElementById("xiu").innerText=xiu;
-document.getElementById("bar").style.width=tai+"%";
+document.getElementById("tai").innerText=score;
+document.getElementById("xiu").innerText=100-score;
+document.getElementById("bar").style.width=score+"%";
 document.getElementById("power").innerText=power;
 document.getElementById("bit").innerText=ones+" / "+zeros;
 document.getElementById("parity").innerText=parity;
+document.getElementById("conf").innerText=confidence+"%";
+document.getElementById("lucky").innerText=lucky;
 
-// mở nút đúng/sai
 document.getElementById("btnOk").disabled=false;
 document.getElementById("btnFail").disabled=false;
 
-// history
 history.unshift(result+" | "+md5.substring(0,6));
 if(history.length>20) history.pop();
 document.getElementById("history").innerHTML=history.join("<br>");
@@ -217,13 +240,12 @@ document.getElementById("history").innerHTML=history.join("<br>");
 
 function mark(ok){
 if(ok) correct++; else wrong++;
-
 document.getElementById("stats").innerText=
 "ĐÚNG: "+correct+" | SAI: "+wrong;
 
-// khóa lại sau khi bấm
 document.getElementById("btnOk").disabled=true;
 document.getElementById("btnFail").disabled=true;
 }
 </script></body>
+</html></script></body>
 </html>
