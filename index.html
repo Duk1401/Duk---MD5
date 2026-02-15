@@ -104,7 +104,7 @@ margin-top:15px;
 height:100%;
 width:0%;
 background:linear-gradient(90deg,#00c853,#00e5ff);
-box-shadow:0 0 10px #00e5ff,0 0 20px #00e5ff;
+box-shadow:0 0 10px #00e5ff;
 }
 
 .result{
@@ -186,7 +186,9 @@ alert("Key không hợp lệ!");
 }
 }
 
+/* ===== ANALYZE ===== */
 function analyze(mode){
+
 let md5 = document.getElementById("md5").value.trim().toLowerCase();
 let bar = document.getElementById("bar");
 let percentText = document.getElementById("percent");
@@ -195,15 +197,18 @@ let result = document.getElementById("result");
 let scan = document.getElementById("scanEffect");
 let cards = document.querySelectorAll(".card");
 
-if(md5.length != 32){
+/* kiểm tra md5 */
+if(md5.length !== 32){
 result.innerHTML = "MD5 không hợp lệ";
 return;
 }
 
+/* chặn VIP cứng */
 if(mode === "vip"){
 let vip = localStorage.getItem("vip_active");
 if(vip !== "true"){
-result.innerHTML = "⚠️ Chưa kích hoạt VIP";
+alert("Bạn chưa kích hoạt VIP!");
+result.innerHTML = "⚠️ Vui lòng nhập KEY VIP";
 return;
 }
 }
@@ -229,25 +234,47 @@ clearInterval(interval);
 scan.style.display = "none";
 cards.forEach(c=>c.classList.remove("analyzing"));
 
-let hash = 0;
-for(let i=0;i<md5.length;i++){
-hash += md5.charCodeAt(i);
+if(mode === "vip"){
+showVIP(md5);
+}else{
+showBasic(md5);
 }
-
-let tai = (hash % 51) + 50;
-let xiu = 100 - tai;
-let choose = tai > xiu ? "TÀI" : "XỈU";
-
-result.innerHTML =
-"Chế độ: " + (mode==="vip"?"VIP PRO":"THƯỜNG") + "<br><br>" +
-"Tài: " + tai + "%<br>" +
-"Xỉu: " + xiu + "%<br><br>" +
-"Nên chọn: <b>" + choose + "</b>";
 }
 },120);
 }
 
-/* ===== FIREWORKS 3D ===== */
+/* ===== BASIC ===== */
+function showBasic(md5){
+let last = md5[31];
+let tai_chars = ['0','2','4','6','8','a','c','e'];
+let resultText = tai_chars.includes(last) ? "TÀI" : "XỈU";
+
+document.getElementById("result").innerHTML =
+"<b>Chế độ: THƯỜNG</b><br><br>" +
+"Ký tự cuối: " + last + "<br>" +
+"Kết quả: <b>" + resultText + "</b>";
+}
+
+/* ===== VIP (thuật toán riêng) ===== */
+function showVIP(md5){
+let sum = 0;
+for(let i=0;i<md5.length;i++){
+sum += parseInt(md5[i],16);
+}
+
+let tai = (sum % 41) + 60; // 60–100%
+if(tai > 95) tai = 95;
+let xiu = 100 - tai;
+let choose = tai > xiu ? "TÀI" : "XỈU";
+
+document.getElementById("result").innerHTML =
+"<b style='color:#00ff9c'>VIP PRO</b><br><br>" +
+"Tài: " + tai + "%<br>" +
+"Xỉu: " + xiu + "%<br><br>" +
+"AI khuyến nghị: <b>" + choose + "</b>";
+}
+
+/* ===== FIREWORKS ===== */
 const canvas = document.getElementById("fireworks");
 const ctx = canvas.getContext("2d");
 
@@ -263,15 +290,15 @@ let particles = [];
 function createFirework(){
 let x = Math.random()*canvas.width;
 let y = Math.random()*canvas.height/2;
-let colors = ["#00e5ff","#00ff9c","#ffffff","#66ffcc"];
+let colors = ["#00e5ff","#00ff9c","#ffffff"];
 
-for(let i=0;i<25;i++){
+for(let i=0;i<20;i++){
 particles.push({
 x:x,
 y:y,
 angle:Math.random()*Math.PI*2,
-speed:Math.random()*4+1,
-life:60,
+speed:Math.random()*3+1,
+life:50,
 color:colors[Math.floor(Math.random()*colors.length)]
 });
 }
@@ -297,7 +324,7 @@ if(p.life<=0) particles.splice(i,1);
 requestAnimationFrame(update);
 }
 
-setInterval(createFirework,800);
+setInterval(createFirework,1000);
 update();
 </script>
 
