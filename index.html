@@ -27,42 +27,59 @@ position:relative;
 z-index:1;
 }
 
-/* NEON HEADER */
+/* HEADER NEON ANIMATION */
 .header{
 background:#06142b;
 padding:15px;
 font-size:22px;
 font-weight:bold;
 color:#00e5ff;
-text-shadow:
-0 0 5px #00e5ff,
-0 0 10px #00e5ff,
-0 0 20px #00e5ff;
-box-shadow:0 0 10px rgba(0,229,255,0.3);
+animation:neonHeader 2s infinite alternate;
 }
 
-/* NEON RESULT */
+@keyframes neonHeader{
+from{
+text-shadow:0 0 5px #00e5ff,0 0 10px #00e5ff;
+}
+to{
+text-shadow:0 0 15px #00e5ff,0 0 30px #00e5ff;
+}
+}
+
+/* RESULT */
 .big{
 font-size:50px;
 font-weight:bold;
 margin-top:10px;
-transition:0.3s;
 }
 
+/* NEON BLINK */
 .neon-tai{
 color:#00ff9c;
-text-shadow:
-0 0 5px #00ff9c,
-0 0 15px #00ff9c,
-0 0 30px #00ff9c;
+animation:blinkTai 1s infinite alternate;
 }
 
 .neon-xiu{
 color:#ff1744;
-text-shadow:
-0 0 5px #ff1744,
-0 0 15px #ff1744,
-0 0 30px #ff1744;
+animation:blinkXiu 1s infinite alternate;
+}
+
+@keyframes blinkTai{
+from{
+text-shadow:0 0 5px #00ff9c,0 0 10px #00ff9c;
+}
+to{
+text-shadow:0 0 20px #00ff9c,0 0 40px #00ff9c;
+}
+}
+
+@keyframes blinkXiu{
+from{
+text-shadow:0 0 5px #ff1744,0 0 10px #ff1744;
+}
+to{
+text-shadow:0 0 20px #ff1744,0 0 40px #ff1744;
+}
 }
 
 .box{
@@ -134,39 +151,15 @@ text-align:left;
 max-height:150px;
 overflow:auto;
 }
-
-/* SCAN */
-.scan::after{
-content:"";
-position:absolute;
-top:-100%;
-left:0;
-width:100%;
-height:100%;
-background:linear-gradient(180deg,transparent,#00e5ff,transparent);
-animation:scanMove 1s linear infinite;
-}
-
-@keyframes scanMove{
-0%{top:-100%;}
-100%{top:100%;}
-}
-
-.loading{
-color:#00e5ff;
-font-size:18px;
-margin-top:10px;
-}
 </style></head><body><canvas id="fireworks"></canvas>
 
 <div class="main"><div class="header">
 MD5 V9 PRO • HYBRID AI
-</div><div class="box" id="scanBox">
+</div><div class="box">
 <input id="md5" placeholder="Nhập MD5 32 ký tự">
 <br>
 <button class="mainBtn" onclick="analyze()">PHÂN TÍCH</button>
 <button class="toggle" onclick="reverse()">ĐẢO: <span id="rev">OFF</span></button>
-<div id="loading" class="loading"></div>
 </div><div class="box">
 <div>DỰ ĐOÁN</div>
 <div class="big" id="result">--</div><div class="bar"><div class="fill" id="bar"></div></div><div class="row">
@@ -185,7 +178,7 @@ MD5 V9 PRO • HYBRID AI
 <div>LỊCH SỬ (20 phiên)</div>
 <div class="history" id="history"></div>
 </div></div><script>
-// ===== FIREWORK =====
+// FIREWORK
 const canvas=document.getElementById("fireworks");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -228,7 +221,7 @@ requestAnimationFrame(loop);
 setInterval(createRocket,800);
 loop();
 
-// ===== MD5 HYBRID =====
+// MD5
 let correct=0,wrong=0,rev=false,history=[];
 
 function reverse(){
