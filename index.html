@@ -1,7 +1,7 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 V1.2</title><style>
+<title>MD5 V1.2 — DUK</title><style>
 body{
 margin:0;
 font-family:Arial;
@@ -11,7 +11,6 @@ text-align:center;
 overflow:hidden;
 }
 
-/* FIREWORK FRONT */
 #fireworks{
 position:fixed;
 top:0;
@@ -22,7 +21,6 @@ pointer-events:none;
 z-index:999;
 }
 
-/* HEADER HOLOGRAM */
 .header{
 padding:18px;
 font-size:24px;
@@ -39,7 +37,6 @@ animation:glow 2s infinite alternate;
 100%{text-shadow:0 0 40px #00f7ff;}
 }
 
-/* GLASS BOX */
 .box{
 margin:12px;
 padding:15px;
@@ -53,7 +50,6 @@ position:relative;
 z-index:1;
 }
 
-/* INPUT */
 input{
 width:90%;
 padding:12px;
@@ -65,7 +61,6 @@ text-align:center;
 font-size:16px;
 }
 
-/* BUTTON */
 button{
 margin-top:10px;
 padding:12px 18px;
@@ -83,7 +78,6 @@ button:disabled{
 opacity:0.4;
 }
 
-/* RESULT NEON */
 .big{
 font-size:50px;
 font-weight:bold;
@@ -96,7 +90,6 @@ animation:resultGlow 1.2s infinite;
 50%{text-shadow:0 0 40px #00f7ff,0 0 80px #008cff;}
 }
 
-/* SCAN EFFECT */
 .scan::after{
 content:"";
 position:absolute;
@@ -113,7 +106,6 @@ animation:scanMove 1s linear infinite;
 100%{top:100%;}
 }
 
-/* BAR */
 .bar{
 height:10px;
 background:#222;
@@ -142,39 +134,38 @@ text-align:left;
 max-height:140px;
 overflow:auto;
 }
-</style></head>
-<body><canvas id="fireworks"></canvas>
-
-<div class="header">MD5 V1.2 — DUK</div><!-- INPUT --><div class="box" id="scanBox">
+</style></head><body>
+<canvas id="fireworks"></canvas><div class="header">MD5 V1.2 — DUK</div><div class="box" id="scanBox">
 <input id="md5" placeholder="Nhập MD5 32 ký tự">
 <br>
-<button class="mainBtn" onclick="analyze()">PHÂN TÍCH</button>
+<button class="mainBtn" id="analyzeBtn" onclick="analyze()">PHÂN TÍCH</button>
 <div id="loading"></div>
-</div><!-- RESULT --><div class="box">
+</div><div class="box">
 <div>DỰ ĐOÁN</div>
-<div class="big" id="result">--</div><div class="bar"><div class="fill" id="bar"></div></div><div class="row">
+<div class="big" id="result">--</div>
+<div class="bar"><div class="fill" id="bar"></div></div><div class="row">
 <span>TÀI: <span id="tai">50</span>%</span>
 <span>XỈU: <span id="xiu">50</span>%</span>
 </div><button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
 <button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button>
 
 <div id="stats">ĐÚNG: 0 | SAI: 0</div>
-</div><!-- CONFIDENCE BOX --><div class="box">
+</div><div class="box">
 <div class="row">
 <span>PHÂN TÍCH THUẬT TOÁN</span>
 <span id="conf">0%</span>
 </div>
-</div><!-- LUCKY BOX --><div class="box">
+</div><div class="box">
 <div class="row">
 <span>MAY MẮN</span>
 <span id="lucky">0</span>
 </div>
-</div><!-- WINRATE BOX --><div class="box">
+</div><div class="box">
 <div class="row">
 <span>TỶ LỆ THẮNG</span>
 <span id="winrate">0%</span>
 </div>
-</div><!-- HISTORY --><div class="box">
+</div><div class="box">
 <div>LỊCH SỬ (20)</div>
 <div class="history" id="history"></div>
 </div><script>
@@ -183,10 +174,24 @@ let history=[];
 let win_count=0;
 let total_count=0;
 
+let last_md5="";
+let result_locked=false;
+
 function analyze(){
 
 let md5=document.getElementById("md5").value.trim().toLowerCase();
 if(md5.length!=32){alert("MD5 phải đủ 32 ký tự");return;}
+
+// Nếu MD5 giống và đã khóa → không cho chạy
+if(result_locked && md5===last_md5){
+alert("Kết quả đã khóa. Nhập MD5 mới.");
+return;
+}
+
+last_md5 = md5;
+result_locked = true;
+
+document.getElementById("analyzeBtn").disabled=true;
 
 let box=document.getElementById("scanBox");
 box.classList.add("scan");
@@ -207,21 +212,24 @@ let algo2 = parseInt(last_char,16)>=8 ? "XỈU":"TÀI";
 
 let result = (algo1===algo2) ? algo1 : (Math.random()<0.7 ? algo2 : algo1);
 
-/* AI LEARNING */
+/* LEARNING */
 let winrate = total_count>0 ? Math.floor((win_count/total_count)*100) : 50;
-
-let base_conf = Math.floor(Math.random()*20)+79;
-let confidence = Math.min(98, Math.max(60, base_conf + Math.floor((winrate-50)/2)));
-
+let confidence = Math.floor(Math.random()*20)+79;
 let lucky=parseInt(md5.substring(0,2),16)%100;
 
-let percent = result=="TÀI" ? Math.floor(Math.random()*30)+50 : Math.floor(Math.random()*50);
+let percent = result=="TÀI"
+? Math.floor(Math.random()*30)+50
+: Math.floor(Math.random()*50);
+
+/* KHÓA % */
+let tai_percent = percent;
+let xiu_percent = 100-percent;
 
 /* UI */
 document.getElementById("result").innerText=result;
-document.getElementById("tai").innerText=percent;
-document.getElementById("xiu").innerText=100-percent;
-document.getElementById("bar").style.width=percent+"%";
+document.getElementById("tai").innerText=tai_percent;
+document.getElementById("xiu").innerText=xiu_percent;
+document.getElementById("bar").style.width=tai_percent+"%";
 document.getElementById("conf").innerText=confidence+"%";
 document.getElementById("lucky").innerText=lucky;
 document.getElementById("winrate").innerText=winrate+"%";
@@ -232,6 +240,8 @@ document.getElementById("btnFail").disabled=false;
 history.unshift(result+" | "+md5.substring(0,6));
 if(history.length>20) history.pop();
 document.getElementById("history").innerHTML=history.join("<br>");
+
+document.getElementById("analyzeBtn").disabled=false;
 
 },1000);
 }
