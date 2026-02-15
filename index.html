@@ -11,7 +11,7 @@ text-align:center;
 overflow:hidden;
 }
 
-/* ===== FIREWORK FRONT ===== */
+/* FIREWORK FRONT */
 #fireworks{
 position:fixed;
 top:0;
@@ -22,7 +22,7 @@ pointer-events:none;
 z-index:999;
 }
 
-/* ===== HOLOGRAM HEADER ===== */
+/* HEADER HOLOGRAM */
 .header{
 padding:18px;
 font-size:24px;
@@ -30,19 +30,16 @@ font-weight:bold;
 background:rgba(0,0,0,0.3);
 backdrop-filter:blur(10px);
 color:#00f7ff;
-text-shadow:
-0 0 5px #00f7ff,
-0 0 15px #00f7ff,
-0 0 30px #00f7ff;
-animation:holo 3s infinite alternate;
+text-shadow:0 0 10px #00f7ff,0 0 30px #00f7ff;
+animation:glow 2s infinite alternate;
 }
 
-@keyframes holo{
-0%{text-shadow:0 0 5px #00f7ff;}
-100%{text-shadow:0 0 25px #00f7ff,0 0 50px #008cff;}
+@keyframes glow{
+0%{text-shadow:0 0 10px #00f7ff;}
+100%{text-shadow:0 0 40px #00f7ff;}
 }
 
-/* ===== GLASS BOX ===== */
+/* GLASS BOX */
 .box{
 margin:12px;
 padding:15px;
@@ -56,7 +53,7 @@ position:relative;
 z-index:1;
 }
 
-/* ===== INPUT ===== */
+/* INPUT */
 input{
 width:90%;
 padding:12px;
@@ -68,7 +65,7 @@ text-align:center;
 font-size:16px;
 }
 
-/* ===== BUTTON ===== */
+/* BUTTON */
 button{
 margin-top:10px;
 padding:12px 18px;
@@ -86,20 +83,20 @@ button:disabled{
 opacity:0.4;
 }
 
-/* ===== RESULT HOLOGRAM ===== */
+/* RESULT NEON */
 .big{
 font-size:50px;
 font-weight:bold;
 color:#00f7ff;
-animation:glow 1.5s infinite;
+animation:resultGlow 1.2s infinite;
 }
 
-@keyframes glow{
+@keyframes resultGlow{
 0%,100%{text-shadow:0 0 10px #00f7ff;}
-50%{text-shadow:0 0 30px #00f7ff,0 0 60px #008cff;}
+50%{text-shadow:0 0 40px #00f7ff,0 0 80px #008cff;}
 }
 
-/* ===== SCAN ===== */
+/* SCAN EFFECT */
 .scan::after{
 content:"";
 position:absolute;
@@ -116,7 +113,7 @@ animation:scanMove 1s linear infinite;
 100%{top:100%;}
 }
 
-/* ===== BAR ===== */
+/* BAR */
 .bar{
 height:10px;
 background:#222;
@@ -148,30 +145,36 @@ overflow:auto;
 </style></head>
 <body><canvas id="fireworks"></canvas>
 
-<div class="header">MD5 V10 PRO • VIP HOLOGRAM AI</div><div class="box" id="scanBox">
+<div class="header">MD5 V10 PRO • VIP HOLOGRAM AI</div><!-- INPUT --><div class="box" id="scanBox">
 <input id="md5" placeholder="Nhập MD5 32 ký tự">
 <br>
 <button class="mainBtn" onclick="analyze()">PHÂN TÍCH</button>
 <div id="loading"></div>
-</div><div class="box">
+</div><!-- RESULT --><div class="box">
 <div>DỰ ĐOÁN</div>
 <div class="big" id="result">--</div><div class="bar"><div class="fill" id="bar"></div></div><div class="row">
 <span>TÀI: <span id="tai">50</span>%</span>
 <span>XỈU: <span id="xiu">50</span>%</span>
-</div><div class="row">
-<span>Confidence:</span>
-<span id="conf">0%</span>
-</div><div class="row">
-<span>Lucky:</span>
-<span id="lucky">0</span>
-</div><div class="row">
-<span>Winrate AI:</span>
-<span id="winrate">0%</span>
 </div><button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
 <button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button>
 
 <div id="stats">ĐÚNG: 0 | SAI: 0</div>
-</div><div class="box">
+</div><!-- CONFIDENCE BOX --><div class="box">
+<div class="row">
+<span>Confidence AI</span>
+<span id="conf">0%</span>
+</div>
+</div><!-- LUCKY BOX --><div class="box">
+<div class="row">
+<span>Lucky Number</span>
+<span id="lucky">0</span>
+</div>
+</div><!-- WINRATE BOX --><div class="box">
+<div class="row">
+<span>Winrate AI</span>
+<span id="winrate">0%</span>
+</div>
+</div><!-- HISTORY --><div class="box">
 <div>LỊCH SỬ (20)</div>
 <div class="history" id="history"></div>
 </div><script>
@@ -187,33 +190,34 @@ if(md5.length!=32){alert("MD5 phải đủ 32 ký tự");return;}
 
 let box=document.getElementById("scanBox");
 box.classList.add("scan");
-document.getElementById("loading").innerText="AI đang học & phân tích...";
+document.getElementById("loading").innerText="AI đang phân tích...";
 
 setTimeout(()=>{
 
 box.classList.remove("scan");
 document.getElementById("loading").innerText="";
 
-/* ===== HYBRID LOGIC ===== */
+/* HYBRID AI */
 let last_char=md5.slice(-1);
 
 let tai_chars=['0','2','4','6','8','a','c','e'];
-let logic1 = tai_chars.includes(last_char) ? "TÀI":"XỈU";
+let algo1 = tai_chars.includes(last_char) ? "TÀI":"XỈU";
 
-let logic2 = parseInt(last_char,16)>=8 ? "XỈU":"TÀI";
+let algo2 = parseInt(last_char,16)>=8 ? "XỈU":"TÀI";
 
-let result = logic1===logic2 ? logic1 : (Math.random()<0.8?logic2:logic1);
+let result = (algo1===algo2) ? algo1 : (Math.random()<0.7 ? algo2 : algo1);
 
-/* ===== AI TỰ HỌC CONFIDENCE ===== */
-let base_conf = Math.floor(Math.random()*20)+79;
-
+/* AI LEARNING */
 let winrate = total_count>0 ? Math.floor((win_count/total_count)*100) : 50;
+
+let base_conf = Math.floor(Math.random()*20)+79;
 let confidence = Math.min(98, Math.max(60, base_conf + Math.floor((winrate-50)/2)));
 
 let lucky=parseInt(md5.substring(0,2),16)%100;
 
-let percent = result=="TÀI" ? Math.floor(Math.random()*20)+60 : Math.floor(Math.random()*40);
+let percent = result=="TÀI" ? Math.floor(Math.random()*30)+50 : Math.floor(Math.random()*50);
 
+/* UI */
 document.getElementById("result").innerText=result;
 document.getElementById("tai").innerText=percent;
 document.getElementById("xiu").innerText=100-percent;
@@ -245,7 +249,7 @@ document.getElementById("btnOk").disabled=true;
 document.getElementById("btnFail").disabled=true;
 }
 
-/* ===== FIREWORK ===== */
+/* FIREWORK */
 let canvas=document.getElementById("fireworks");
 let ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
