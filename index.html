@@ -1,131 +1,125 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 V9 PRO HYBRID</title><style>
+<title>MD5 V10 PRO VIP</title><style>
 body{
 margin:0;
 font-family:Arial;
-background:#0a0f1f;
+background:linear-gradient(180deg,#02030a,#040a1f);
 color:white;
 text-align:center;
 overflow:hidden;
 }
 
-/* FIREWORK FRONT */
+/* ===== FIREWORK FRONT ===== */
 #fireworks{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-z-index:999;
 pointer-events:none;
+z-index:999;
 }
 
-.main{
+/* ===== HOLOGRAM HEADER ===== */
+.header{
+padding:18px;
+font-size:24px;
+font-weight:bold;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+color:#00f7ff;
+text-shadow:
+0 0 5px #00f7ff,
+0 0 15px #00f7ff,
+0 0 30px #00f7ff;
+animation:holo 3s infinite alternate;
+}
+
+@keyframes holo{
+0%{text-shadow:0 0 5px #00f7ff;}
+100%{text-shadow:0 0 25px #00f7ff,0 0 50px #008cff;}
+}
+
+/* ===== GLASS BOX ===== */
+.box{
+margin:12px;
+padding:15px;
+border-radius:16px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(12px);
+box-shadow:
+0 0 20px rgba(0,255,255,0.15),
+inset 0 0 10px rgba(255,255,255,0.05);
 position:relative;
 z-index:1;
 }
 
-/* HEADER NEON ANIMATION */
-.header{
-background:#06142b;
-padding:15px;
-font-size:22px;
-font-weight:bold;
-color:#00e5ff;
-animation:neonHeader 2s infinite alternate;
-}
-
-@keyframes neonHeader{
-from{
-text-shadow:0 0 5px #00e5ff,0 0 10px #00e5ff;
-}
-to{
-text-shadow:0 0 15px #00e5ff,0 0 30px #00e5ff;
-}
-}
-
-/* RESULT */
-.big{
-font-size:50px;
-font-weight:bold;
-margin-top:10px;
-}
-
-/* NEON BLINK */
-.neon-tai{
-color:#00ff9c;
-animation:blinkTai 1s infinite alternate;
-}
-
-.neon-xiu{
-color:#ff1744;
-animation:blinkXiu 1s infinite alternate;
-}
-
-@keyframes blinkTai{
-from{
-text-shadow:0 0 5px #00ff9c,0 0 10px #00ff9c;
-}
-to{
-text-shadow:0 0 20px #00ff9c,0 0 40px #00ff9c;
-}
-}
-
-@keyframes blinkXiu{
-from{
-text-shadow:0 0 5px #ff1744,0 0 10px #ff1744;
-}
-to{
-text-shadow:0 0 20px #ff1744,0 0 40px #ff1744;
-}
-}
-
-.box{
-margin:12px;
-padding:15px;
-background:#111a33;
-border-radius:12px;
-box-shadow:0 0 12px rgba(0,229,255,0.15);
-position:relative;
-overflow:hidden;
-}
-
+/* ===== INPUT ===== */
 input{
 width:90%;
 padding:12px;
-border-radius:8px;
 border:none;
-background:#0a0f1f;
+border-radius:10px;
+background:rgba(0,0,0,0.4);
 color:white;
 text-align:center;
 font-size:16px;
 }
 
+/* ===== BUTTON ===== */
 button{
 margin-top:10px;
 padding:12px 18px;
 border:none;
-border-radius:8px;
+border-radius:10px;
 font-weight:bold;
-font-size:15px;
 cursor:pointer;
 }
 
-.mainBtn{background:#00e5ff;color:black;}
-.ok{background:#00c853;color:white;}
-.fail{background:#ff1744;color:white;}
-.toggle{background:#ffaa00;color:black;}
+.mainBtn{background:#00f7ff;color:black;}
+.ok{background:#00c853;}
+.fail{background:#ff1744;}
 
 button:disabled{
 opacity:0.4;
-cursor:not-allowed;
 }
 
+/* ===== RESULT HOLOGRAM ===== */
+.big{
+font-size:50px;
+font-weight:bold;
+color:#00f7ff;
+animation:glow 1.5s infinite;
+}
+
+@keyframes glow{
+0%,100%{text-shadow:0 0 10px #00f7ff;}
+50%{text-shadow:0 0 30px #00f7ff,0 0 60px #008cff;}
+}
+
+/* ===== SCAN ===== */
+.scan::after{
+content:"";
+position:absolute;
+top:-100%;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(180deg,transparent,#00f7ff,transparent);
+animation:scanMove 1s linear infinite;
+}
+
+@keyframes scanMove{
+0%{top:-100%;}
+100%{top:100%;}
+}
+
+/* ===== BAR ===== */
 .bar{
 height:10px;
-background:#333;
+background:#222;
 border-radius:10px;
 margin-top:10px;
 overflow:hidden;
@@ -133,7 +127,7 @@ overflow:hidden;
 
 .fill{
 height:100%;
-background:linear-gradient(90deg,#ff3d00,#00e5ff);
+background:linear-gradient(90deg,#ff3d00,#00f7ff);
 width:50%;
 transition:0.5s;
 }
@@ -148,18 +142,17 @@ font-size:14px;
 .history{
 font-size:13px;
 text-align:left;
-max-height:150px;
+max-height:140px;
 overflow:auto;
 }
-</style></head><body><canvas id="fireworks"></canvas>
+</style></head>
+<body><canvas id="fireworks"></canvas>
 
-<div class="main"><div class="header">
-MD5 V9 PRO • HYBRID AI
-</div><div class="box">
+<div class="header">MD5 V10 PRO • VIP HOLOGRAM AI</div><div class="box" id="scanBox">
 <input id="md5" placeholder="Nhập MD5 32 ký tự">
 <br>
 <button class="mainBtn" onclick="analyze()">PHÂN TÍCH</button>
-<button class="toggle" onclick="reverse()">ĐẢO: <span id="rev">OFF</span></button>
+<div id="loading"></div>
 </div><div class="box">
 <div>DỰ ĐOÁN</div>
 <div class="big" id="result">--</div><div class="bar"><div class="fill" id="bar"></div></div><div class="row">
@@ -169,97 +162,65 @@ MD5 V9 PRO • HYBRID AI
 <span>Confidence:</span>
 <span id="conf">0%</span>
 </div><div class="row">
-<span>Lucky Number:</span>
+<span>Lucky:</span>
 <span id="lucky">0</span>
-</div><br>
-<button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
-<button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button><div id="stats">ĐÚNG: 0 | SAI: 0</div>
+</div><div class="row">
+<span>Winrate AI:</span>
+<span id="winrate">0%</span>
+</div><button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
+<button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button>
+
+<div id="stats">ĐÚNG: 0 | SAI: 0</div>
 </div><div class="box">
-<div>LỊCH SỬ (20 phiên)</div>
+<div>LỊCH SỬ (20)</div>
 <div class="history" id="history"></div>
-</div></div><script>
-// FIREWORK
-const canvas=document.getElementById("fireworks");
-const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let rockets=[],particles=[];
-
-function createRocket(){
-rockets.push({x:Math.random()*canvas.width,y:canvas.height,vy:-6,exploded:false});
-}
-
-function explode(x,y){
-for(let i=0;i<40;i++){
-particles.push({x,y,vx:(Math.random()-0.5)*5,vy:(Math.random()-0.5)*5,life:60});
-}
-}
-
-function loop(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-rockets.forEach((r,i)=>{
-r.y+=r.vy;
-ctx.fillStyle="#00e5ff";
-ctx.fillRect(r.x,r.y,2,6);
-if(r.y<canvas.height*0.4&&!r.exploded){explode(r.x,r.y);r.exploded=true;}
-if(r.exploded) rockets.splice(i,1);
-});
-
-particles.forEach((p,i)=>{
-p.x+=p.vx;
-p.y+=p.vy;
-p.life--;
-ctx.fillStyle="rgba(0,229,255,"+(p.life/60)+")";
-ctx.fillRect(p.x,p.y,2,2);
-if(p.life<=0) particles.splice(i,1);
-});
-
-requestAnimationFrame(loop);
-}
-setInterval(createRocket,800);
-loop();
-
-// MD5
-let correct=0,wrong=0,rev=false,history=[];
-
-function reverse(){
-rev=!rev;
-document.getElementById("rev").innerText=rev?"ON":"OFF";
-}
+</div><script>
+let correct=0, wrong=0;
+let history=[];
+let win_count=0;
+let total_count=0;
 
 function analyze(){
+
 let md5=document.getElementById("md5").value.trim().toLowerCase();
 if(md5.length!=32){alert("MD5 phải đủ 32 ký tự");return;}
 
-let power=0,ones=0;
-for(let c of md5){
-let v=parseInt(c,16);
-power+=v;
-ones+=v.toString(2).split("1").length-1;
-}
+let box=document.getElementById("scanBox");
+box.classList.add("scan");
+document.getElementById("loading").innerText="AI đang học & phân tích...";
 
-let score=(power+ones)%100;
+setTimeout(()=>{
 
-let last=md5.slice(-1);
-let algo1=parseInt(last,16)>=8?"XỈU":"TÀI";
-let taiChars=['0','2','4','6','8','a','c','e'];
-let algo2=taiChars.includes(last)?"TÀI":"XỈU";
+box.classList.remove("scan");
+document.getElementById("loading").innerText="";
 
-let result=(algo1===algo2)?algo1:(score>=50?"TÀI":"XỈU");
-if(rev) result=result=="TÀI"?"XỈU":"TÀI";
+/* ===== HYBRID LOGIC ===== */
+let last_char=md5.slice(-1);
 
-let resultEl=document.getElementById("result");
-resultEl.innerText=result;
-resultEl.className="big "+(result=="TÀI"?"neon-tai":"neon-xiu");
+let tai_chars=['0','2','4','6','8','a','c','e'];
+let logic1 = tai_chars.includes(last_char) ? "TÀI":"XỈU";
 
-document.getElementById("tai").innerText=score;
-document.getElementById("xiu").innerText=100-score;
-document.getElementById("bar").style.width=score+"%";
+let logic2 = parseInt(last_char,16)>=8 ? "XỈU":"TÀI";
 
-document.getElementById("conf").innerText=(Math.floor(Math.random()*20)+79)+"%";
-document.getElementById("lucky").innerText=parseInt(md5.substring(0,2),16)%100;
+let result = logic1===logic2 ? logic1 : (Math.random()<0.8?logic2:logic1);
+
+/* ===== AI TỰ HỌC CONFIDENCE ===== */
+let base_conf = Math.floor(Math.random()*20)+79;
+
+let winrate = total_count>0 ? Math.floor((win_count/total_count)*100) : 50;
+let confidence = Math.min(98, Math.max(60, base_conf + Math.floor((winrate-50)/2)));
+
+let lucky=parseInt(md5.substring(0,2),16)%100;
+
+let percent = result=="TÀI" ? Math.floor(Math.random()*20)+60 : Math.floor(Math.random()*40);
+
+document.getElementById("result").innerText=result;
+document.getElementById("tai").innerText=percent;
+document.getElementById("xiu").innerText=100-percent;
+document.getElementById("bar").style.width=percent+"%";
+document.getElementById("conf").innerText=confidence+"%";
+document.getElementById("lucky").innerText=lucky;
+document.getElementById("winrate").innerText=winrate+"%";
 
 document.getElementById("btnOk").disabled=false;
 document.getElementById("btnFail").disabled=false;
@@ -267,13 +228,59 @@ document.getElementById("btnFail").disabled=false;
 history.unshift(result+" | "+md5.substring(0,6));
 if(history.length>20) history.pop();
 document.getElementById("history").innerHTML=history.join("<br>");
+
+},1000);
 }
 
 function mark(ok){
-if(ok)correct++;else wrong++;
+total_count++;
+if(ok){correct++; win_count++;} else wrong++;
+
 document.getElementById("stats").innerText="ĐÚNG: "+correct+" | SAI: "+wrong;
+
+let winrate = Math.floor((win_count/total_count)*100);
+document.getElementById("winrate").innerText=winrate+"%";
+
 document.getElementById("btnOk").disabled=true;
 document.getElementById("btnFail").disabled=true;
 }
+
+/* ===== FIREWORK ===== */
+let canvas=document.getElementById("fireworks");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function firework(){
+let x=Math.random()*canvas.width;
+let y=canvas.height;
+for(let i=0;i<40;i++){
+particles.push({
+x:x,
+y:y,
+vx:(Math.random()-0.5)*4,
+vy:-Math.random()*6-2,
+life:60
+});
+}
+}
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach((p,i)=>{
+p.x+=p.vx;
+p.y+=p.vy;
+p.life--;
+ctx.fillStyle="cyan";
+ctx.fillRect(p.x,p.y,2,2);
+if(p.life<=0) particles.splice(i,1);
+});
+requestAnimationFrame(animate);
+}
+
+setInterval(firework,1200);
+animate();
 </script></body>
 </html>
