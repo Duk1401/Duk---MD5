@@ -255,7 +255,6 @@ document.getElementById("result").innerHTML =
 "Kết quả: <b>" + resultText + "</b>";
 }
 
-/* ===== VIP (thuật toán riêng) ===== */
 /* =========================
    VIP PRO AI ENGINE v3
 ========================= */
@@ -334,6 +333,8 @@ document.getElementById("result").innerHTML =
 "<div style='font-size:20px'>AI khuyến nghị: <b>" + choose + "</b></div><br>" +
 "<span style='font-size:12px;color:#aaa'>Hệ thống AI phân tích đa lớp • VIP Engine v3</span>";
 
+    }
+requestAnimationFrame(update);
 }
 
 setInterval(createFirework,1000);
