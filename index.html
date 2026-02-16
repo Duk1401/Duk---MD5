@@ -211,8 +211,7 @@ text-shadow:0 0 10px #00f7ff;
 <div class="box">
 <button class="vipBtn" onclick="setMode('vip')">VIP</button>
 <button class="mainBtn" onclick="setMode('basic')">BASIC</button>
-<!-- BOX HIỂN THỊ CHẾ ĐỘ --><div class="modeContainer">
-<div id="modeText" class="modeDisplay vipActive">⚡ VIP MODE</div>
+<div id="modeText" class="modeBox mode-vip">👑 VIP MODE</div>
 </div>
 
 <div class="box">
@@ -285,10 +284,10 @@ let box=document.getElementById("modeText");
 
 if(m==="vip"){
 box.className="modeBox mode-vip";
-box.innerText="⚡ VIP MODE";
+box.innerText="👑 VIP MODE";
 }else{
 box.className="modeBox mode-basic";
-box.innerText="🌐 BASIC MODE";
+box.innerText="⚡ BASIC MODE";
 }
 }
 
