@@ -22,6 +22,29 @@ overflow:hidden;
 100%{background-position:0% 50%;}
 }
 
+
+/* ===== FIREWORK ===== */
+#fireworks{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:0;
+}
+
+/* ===== HEADER ===== */
+.header{
+padding:18px;
+font-size:24px;
+font-weight:bold;
+background:rgba(0,0,0,0.4);
+backdrop-filter:blur(10px);
+color:#00f7ff;
+text-shadow:0 0 15px #00f7ff,0 0 40px #00f7ff;
+}
+
 /* ===== MODE NEON ===== */
 .modeBox{
 margin-top:10px;
@@ -55,28 +78,6 @@ box-shadow:
 0 0 30px rgba(0,247,255,0.6),
 inset 0 0 12px #00f7ff;
 text-shadow:0 0 10px #00f7ff,0 0 20px #00f7ff;
-}
-
-/* ===== FIREWORK ===== */
-#fireworks{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-pointer-events:none;
-z-index:0;
-}
-
-/* ===== HEADER ===== */
-.header{
-padding:18px;
-font-size:24px;
-font-weight:bold;
-background:rgba(0,0,0,0.4);
-backdrop-filter:blur(10px);
-color:#00f7ff;
-text-shadow:0 0 15px #00f7ff,0 0 40px #00f7ff;
 }
 
 /* ===== BOX ===== */
@@ -210,7 +211,7 @@ text-shadow:0 0 10px #00f7ff;
 <div class="box">
 <button class="vipBtn" onclick="setMode('vip')">VIP</button>
 <button class="mainBtn" onclick="setMode('basic')">BASIC</button>
-<div id="modeText">\nChế độ: ⚡ VIP MODE</div>
+<div id="modeText" class="modeBox mode-vip">👑 VIP MODE</div>
 </div>
 
 <div class="box">
@@ -287,6 +288,7 @@ box.innerText="👑 VIP MODE";
 }else{
 box.className="modeBox mode-basic";
 box.innerText="⚡ BASIC MODE";
+}
 }
 
 function analyze(){
