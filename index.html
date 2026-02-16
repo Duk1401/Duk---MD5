@@ -1,17 +1,22 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 V1.2 — DUK</title>
-
-<style>
+<title>MD5 NEON PRO — DUK</title><style>
 body{
 margin:0;
 font-family:Arial;
-background:linear-gradient(180deg,#02030a,#040a1f);
+background:linear-gradient(270deg,#02030a,#040a1f,#000000,#040a1f);
+background-size:600% 600%;
+animation:bgMove 12s ease infinite;
 color:white;
 text-align:center;
 overflow:hidden;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 #fireworks{
@@ -21,26 +26,26 @@ left:0;
 width:100%;
 height:100%;
 pointer-events:none;
-z-index:999;
+z-index:0;
 }
 
 .header{
 padding:18px;
 font-size:24px;
 font-weight:bold;
-background:rgba(0,0,0,0.3);
+background:rgba(0,0,0,0.4);
 backdrop-filter:blur(10px);
 color:#00f7ff;
-text-shadow:0 0 10px #00f7ff,0 0 30px #00f7ff;
+text-shadow:0 0 15px #00f7ff,0 0 40px #00f7ff;
 }
 
 .box{
 margin:12px;
 padding:15px;
 border-radius:16px;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(12px);
-box-shadow:0 0 20px rgba(0,255,255,0.15);
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(14px);
+box-shadow:0 0 25px rgba(0,255,255,0.35);
 }
 
 input{
@@ -48,10 +53,11 @@ width:90%;
 padding:12px;
 border:none;
 border-radius:10px;
-background:rgba(0,0,0,0.4);
-color:white;
+background:#000;
+color:#00f7ff;
 text-align:center;
 font-size:16px;
+box-shadow:0 0 10px #00f7ff inset;
 }
 
 button{
@@ -63,7 +69,18 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.mainBtn{background:#00f7ff;color:black;}
+.mainBtn{
+background:#001f2b;
+color:#00f7ff;
+box-shadow:0 0 10px #00f7ff;
+}
+
+.vipBtn{
+background:#2b2100;
+color:#ffd700;
+box-shadow:0 0 12px #ffd700;
+}
+
 .ok{background:#00c853;}
 .fail{background:#ff1744;}
 
@@ -71,6 +88,7 @@ cursor:pointer;
 font-size:50px;
 font-weight:bold;
 color:#00f7ff;
+text-shadow:0 0 20px #00f7ff;
 }
 
 .bar{
@@ -101,80 +119,52 @@ text-align:left;
 max-height:140px;
 overflow:auto;
 }
-</style>
-</head>
+</style></head><body><canvas id="fireworks"></canvas>
 
-<body>
-
-<canvas id="fireworks"></canvas>
-
-<div class="header">MD5 V1.2 — DUK</div>
-
-<!-- MENU MODE -->
-<div class="box">
-<button class="mainBtn" disabled="setMode('vip')">VIP</button>
-<button onclick="setMode('basic')">BASIC</button>
+<div class="header">MD5 NEON PRO — DUK</div><div class="box">
+<button class="vipBtn" onclick="setMode('vip')">VIP</button>
+<button class="mainBtn" onclick="setMode('basic')">BASIC</button>
 <div id="modeText">Chế độ: VIP</div>
-</div>
-
-<div class="box" id="scanBox">
+</div><div class="box">
 <input id="md5" placeholder="Nhập MD5 32 ký tự">
 <br>
 <button class="mainBtn" id="analyzeBtn" onclick="analyze()">PHÂN TÍCH</button>
 <div id="loading"></div>
-</div>
-
-<div class="box">
+</div><div class="box">
 <div>DỰ ĐOÁN</div>
 <div class="big" id="result">--</div>
-<div class="bar"><div class="fill" id="bar"></div></div>
-
-<div class="row">
+<div class="bar"><div class="fill" id="bar"></div></div><div class="row">
 <span>TÀI: <span id="tai">50</span>%</span>
 <span>XỈU: <span id="xiu">50</span>%</span>
-</div>
-
-<button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
+</div><button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
 <button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button>
 
 <div id="stats">ĐÚNG: 0 | SAI: 0</div>
-</div>
-
-<div class="box">
+</div><div class="box">
 <div class="row">
 <span>PHÂN TÍCH THUẬT TOÁN</span>
 <span id="conf">0%</span>
 </div>
-</div>
-
-<div class="box">
+</div><div class="box">
 <div class="row">
 <span>MAY MẮN</span>
 <span id="lucky">0</span>
 </div>
-</div>
-
-<div class="box">
+</div><div class="box">
 <div class="row">
 <span>TỶ LỆ THẮNG</span>
-<span id="winrate">0%</span>
+<span id="winrate">50%</span>
 </div>
-</div>
-
-<div class="box">
+</div><div class="box">
 <div>LỊCH SỬ (20)</div>
 <div class="history" id="history"></div>
-</div>
-
-<script>
+</div><script>
 let correct=0, wrong=0;
 let history=[];
 let win_count=0;
 let total_count=0;
 
 let mode="vip";
-let last_md5="";
-let result_locked=false;
 
 function setMode(m){
 mode=m;
@@ -186,52 +176,45 @@ function analyze(){
 let md5=document.getElementById("md5").value.trim().toLowerCase();
 if(md5.length!=32){alert("MD5 phải đủ 32 ký tự");return;}
 
-if(result_locked && md5===last_md5){
-alert("Kết quả đã khóa. Nhập MD5 mới.");
-return;
-}
-
-last_md5=md5;
-result_locked=true;
-
 document.getElementById("analyzeBtn").disabled=true;
 document.getElementById("loading").innerText="ĐANG PHÂN TÍCH...";
 
 setTimeout(()=>{
 
-document.getElementById("loading").innerText="";
-
 let result;
 let confidence;
 
-/* ===== VIP ===== */
+/* VIP mạnh hơn */
 if(mode==="vip"){
-let last_char=md5.slice(-1);
-let tai_chars=['0','2','4','6','8','a','c','e'];
-let algo1 = tai_chars.includes(last_char) ? "TÀI":"XỈU";
-let algo2 = parseInt(last_char,16)>=8 ? "XỈU":"TÀI";
-result = (algo1===algo2) ? algo1 : (Math.random()<0.7 ? algo2 : algo1);
-confidence = Math.floor(Math.random()*20)+79;
+let last=parseInt(md5.slice(-1),16);
+result = last%2==0 ? "TÀI":"XỈU";
+confidence = Math.floor(Math.random()*10)+85;
 }
 
-/* ===== BASIC ===== */
+/* BASIC yếu hơn */
 else{
 result = Math.random()<0.5 ? "TÀI":"XỈU";
 confidence = Math.floor(Math.random()*20)+50;
 }
 
-/* COMMON */
-let winrate = total_count>0 ? Math.floor((win_count/total_count)*100) : 50;
-let lucky=parseInt(md5.substring(0,2),16)%100;
-
-let percent = result=="TÀI"
+/* Tỷ lệ khác nhau */
+let percent;
+if(mode==="vip"){
+percent = result=="TÀI"
+? Math.floor(Math.random()*15)+75
+: Math.floor(Math.random()*15)+10;
+}else{
+percent = result=="TÀI"
 ? Math.floor(Math.random()*30)+50
 : Math.floor(Math.random()*50);
+}
 
 let tai_percent=percent;
 let xiu_percent=100-percent;
 
-/* UI */
+let lucky=parseInt(md5.substring(0,2),16)%100;
+let winrate = total_count>0 ? Math.floor((win_count/total_count)*100) : 50;
+
 document.getElementById("result").innerText=result;
 document.getElementById("tai").innerText=tai_percent;
 document.getElementById("xiu").innerText=xiu_percent;
@@ -247,9 +230,10 @@ history.unshift(result+" | "+md5.substring(0,6));
 if(history.length>20) history.pop();
 document.getElementById("history").innerHTML=history.join("<br>");
 
+document.getElementById("loading").innerText="";
 document.getElementById("analyzeBtn").disabled=false;
 
-},800);
+},600);
 }
 
 function mark(ok){
@@ -257,9 +241,7 @@ total_count++;
 if(ok){correct++; win_count++;} else wrong++;
 
 document.getElementById("stats").innerText="ĐÚNG: "+correct+" | SAI: "+wrong;
-
-let winrate=Math.floor((win_count/total_count)*100);
-document.getElementById("winrate").innerText=winrate+"%";
+document.getElementById("winrate").innerText=Math.floor((win_count/total_count)*100)+"%";
 
 document.getElementById("btnOk").disabled=true;
 document.getElementById("btnFail").disabled=true;
@@ -302,7 +284,5 @@ requestAnimationFrame(animate);
 
 setInterval(firework,1200);
 animate();
-</script>
-
-</body>
+</script></body>
 </html>
