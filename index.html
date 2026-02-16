@@ -1,7 +1,10 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MD5 NEON PRO — DUK</title><style>
+<title>MD5 NEON PRO — DUK</title>
+
+<style>
 body{
 margin:0;
 font-family:Arial;
@@ -19,6 +22,7 @@ overflow:hidden;
 100%{background-position:0% 50%;}
 }
 
+/* ===== FIREWORK ===== */
 #fireworks{
 position:fixed;
 top:0;
@@ -29,6 +33,7 @@ pointer-events:none;
 z-index:0;
 }
 
+/* ===== HEADER ===== */
 .header{
 padding:18px;
 font-size:24px;
@@ -39,6 +44,7 @@ color:#00f7ff;
 text-shadow:0 0 15px #00f7ff,0 0 40px #00f7ff;
 }
 
+/* ===== BOX ===== */
 .box{
 margin:12px;
 padding:15px;
@@ -48,6 +54,7 @@ backdrop-filter:blur(14px);
 box-shadow:0 0 25px rgba(0,255,255,0.35);
 }
 
+/* ===== INPUT ===== */
 input{
 width:90%;
 padding:12px;
@@ -60,6 +67,7 @@ font-size:16px;
 box-shadow:0 0 10px #00f7ff inset;
 }
 
+/* ===== BUTTON ===== */
 button{
 margin-top:10px;
 padding:12px 18px;
@@ -119,51 +127,118 @@ text-align:left;
 max-height:140px;
 overflow:auto;
 }
-</style></head><body><canvas id="fireworks"></canvas>
 
-<div class="header">MD5 NEON PRO — DUK</div><div class="box">
+/* ===== RADAR SCAN ===== */
+.radarBox{
+display:none;
+margin-top:10px;
+}
+
+.radar{
+width:120px;
+height:120px;
+border-radius:50%;
+margin:10px auto;
+position:relative;
+background:radial-gradient(circle, rgba(0,255,255,0.15) 0%, rgba(0,0,0,0.8) 70%);
+box-shadow:0 0 20px #00f7ff inset, 0 0 25px #00f7ff;
+overflow:hidden;
+}
+
+.radar::after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:conic-gradient(rgba(0,255,255,0.6) 0deg, transparent 60deg);
+animation:scan 1s linear infinite;
+}
+
+@keyframes scan{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
+
+.scanText{
+color:#00f7ff;
+font-size:13px;
+text-shadow:0 0 10px #00f7ff;
+}
+</style>
+</head>
+
+<body>
+<canvas id="fireworks"></canvas>
+
+<div class="header">MD5 NEON PRO — DUK</div>
+
+<div class="box">
 <button class="vipBtn" onclick="setMode('vip')">VIP</button>
 <button class="mainBtn" onclick="setMode('basic')">BASIC</button>
 <div id="modeText">Chế độ: VIP</div>
-</div><div class="box">
+</div>
+
+<div class="box">
 <input id="md5" placeholder="Nhập MD5 32 ký tự">
 <br>
 <button class="mainBtn" id="analyzeBtn" onclick="analyze()">PHÂN TÍCH</button>
+
+<!-- RADAR -->
+<div class="radarBox" id="radarBox">
+<div class="radar"></div>
+<div class="scanText">AI đang phân tích...</div>
+</div>
+
 <div id="loading"></div>
-</div><div class="box">
+</div>
+
+<div class="box">
 <div>DỰ ĐOÁN</div>
 <div class="big" id="result">--</div>
-<div class="bar"><div class="fill" id="bar"></div></div><div class="row">
+<div class="bar"><div class="fill" id="bar"></div></div>
+
+<div class="row">
 <span>TÀI: <span id="tai">50</span>%</span>
 <span>XỈU: <span id="xiu">50</span>%</span>
-</div><button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
+</div>
+
+<button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
 <button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button>
 
 <div id="stats">ĐÚNG: 0 | SAI: 0</div>
-</div><div class="box">
+</div>
+
+<div class="box">
 <div class="row">
 <span>PHÂN TÍCH THUẬT TOÁN</span>
 <span id="conf">0%</span>
 </div>
-</div><div class="box">
+</div>
+
+<div class="box">
 <div class="row">
 <span>MAY MẮN</span>
 <span id="lucky">0</span>
 </div>
-</div><div class="box">
+</div>
+
+<div class="box">
 <div class="row">
 <span>TỶ LỆ THẮNG</span>
 <span id="winrate">50%</span>
 </div>
-</div><div class="box">
+</div>
+
+<div class="box">
 <div>LỊCH SỬ (20)</div>
 <div class="history" id="history"></div>
-</div><script>
+</div>
+
+<script>
 let correct=0, wrong=0;
 let history=[];
 let win_count=0;
 let total_count=0;
-
 let mode="vip";
 
 function setMode(m){
@@ -177,38 +252,24 @@ let md5=document.getElementById("md5").value.trim().toLowerCase();
 if(md5.length!=32){alert("MD5 phải đủ 32 ký tự");return;}
 
 document.getElementById("analyzeBtn").disabled=true;
-document.getElementById("loading").innerText="ĐANG PHÂN TÍCH...";
+document.getElementById("radarBox").style.display="block";
 
 setTimeout(()=>{
 
-let result;
-let confidence;
+document.getElementById("radarBox").style.display="none";
 
-/* VIP mạnh hơn */
+let result, confidence;
+
 if(mode==="vip"){
 let last=parseInt(md5.slice(-1),16);
 result = last%2==0 ? "TÀI":"XỈU";
 confidence = Math.floor(Math.random()*10)+85;
-}
-
-/* BASIC yếu hơn */
-else{
+}else{
 result = Math.random()<0.5 ? "TÀI":"XỈU";
 confidence = Math.floor(Math.random()*20)+50;
 }
 
-/* Tỷ lệ khác nhau */
-let percent;
-if(mode==="vip"){
-percent = result=="TÀI"
-? Math.floor(Math.random()*15)+75
-: Math.floor(Math.random()*15)+10;
-}else{
-percent = result=="TÀI"
-? Math.floor(Math.random()*30)+50
-: Math.floor(Math.random()*50);
-}
-
+let percent = Math.floor(Math.random()*40)+60;
 let tai_percent=percent;
 let xiu_percent=100-percent;
 
@@ -230,10 +291,9 @@ history.unshift(result+" | "+md5.substring(0,6));
 if(history.length>20) history.pop();
 document.getElementById("history").innerHTML=history.join("<br>");
 
-document.getElementById("loading").innerText="";
 document.getElementById("analyzeBtn").disabled=false;
 
-},600);
+},1200);
 }
 
 function mark(ok){
@@ -284,5 +344,7 @@ requestAnimationFrame(animate);
 
 setInterval(firework,1200);
 animate();
-</script></body>
+</script>
+
+</body>
 </html>
