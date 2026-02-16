@@ -34,6 +34,63 @@ pointer-events:none;
 z-index:0;
 }
 
+/* ===== MAINTENANCE OVERLAY ===== */
+#maintenanceBox{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.95);
+    display:none; /* đổi thành flex để bật */
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.maintenance-content{
+    background:rgba(0,20,40,0.6);
+    border:2px solid #00eaff;
+    border-radius:15px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 0 25px #00eaff, 0 0 60px #0088ff;
+    animation:neonPulse 1.5s infinite alternate;
+}
+
+.maintenance-content h2{
+    color:#00eaff;
+    margin:10px 0;
+    text-shadow:0 0 10px #00eaff;
+}
+
+.maintenance-content p{
+    color:#fff;
+    margin:5px 0;
+}
+
+.maintenance-content span{
+    color:#aaa;
+    font-size:13px;
+}
+
+/* Icon xoay */
+.gear{
+    font-size:40px;
+    animation:spin 3s linear infinite;
+}
+
+/* Animations */
+@keyframes neonPulse{
+    from{box-shadow:0 0 15px #00eaff;}
+    to{box-shadow:0 0 35px #00eaff,0 0 70px #0088ff;}
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
 /* ===== HEADER ===== */
 .header{
 padding:18px;
@@ -203,7 +260,28 @@ text-shadow:0 0 10px #00f7ff;
 </style>
 </head>
 
+<script>
+// Bật bảo trì
+function enableMaintenance(){
+    document.getElementById("maintenanceBox").style.display = "flex";
+}
+
+// Tắt bảo trì
+function disableMaintenance(){
+    document.getElementById("maintenanceBox").style.display = "none";
+}
+</script>
+
 <body>
+<!-- ===== MAINTENANCE BOX ===== -->
+<div id="maintenanceBox">
+    <div class="maintenance-content">
+        <div class="gear">⚙️</div>
+        <h2>HỆ THỐNG ĐANG BẢO TRÌ</h2>
+        <p>AI Scan đang được nâng cấp và tối ưu.</p>
+        <span>Vui lòng quay lại sau ít phút...</span>
+    </div>
+</div>
 <canvas id="fireworks"></canvas>
 
 <div class="header">MD5 NEON PRO — DUK</div>
@@ -392,24 +470,8 @@ setInterval(firework,1200);
 animate();
 </script>
 
-</body>
-</html>
-
-function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-particles.forEach((p,i)=>{
-p.x+=p.vx;
-p.y+=p.vy;
-p.life--;
-ctx.fillStyle="cyan";
-ctx.fillRect(p.x,p.y,2,2);
-if(p.life<=0) particles.splice(i,1);
-});
-requestAnimationFrame(animate);
-}
-
-setInterval(firework,1200);
-animate();
+<script>
+disableMaintenance();
 </script>
 
 </body>
