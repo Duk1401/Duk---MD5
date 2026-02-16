@@ -164,41 +164,76 @@ max-height:140px;
 overflow:auto;
 }
 
-/* ===== RADAR SCAN ===== */
-.radarBox{
+/* ===== AI SCAN PRO ===== */
+
+.scanPro{
+margin-top:12px;
+padding:14px;
+border-radius:16px;
+background:rgba(0,0,0,0.45);
+box-shadow:
+0 0 15px #00f7ff,
+inset 0 0 15px #00f7ff;
 display:none;
-margin-top:10px;
 }
 
-.radar{
-width:120px;
-height:120px;
+.scanTitle{
+font-size:13px;
+color:#00f7ff;
+letter-spacing:2px;
+text-shadow:0 0 10px #00f7ff;
+margin-bottom:8px;
+}
+
+/* Radar vòng ngoài */
+.radarPro{
+width:130px;
+height:130px;
 border-radius:50%;
 margin:10px auto;
 position:relative;
-background:radial-gradient(circle, rgba(0,255,255,0.15) 0%, rgba(0,0,0,0.8) 70%);
-box-shadow:0 0 20px #00f7ff inset, 0 0 25px #00f7ff;
+background:radial-gradient(circle, rgba(0,255,255,0.15) 0%, rgba(0,0,0,0.9) 70%);
+box-shadow:
+0 0 25px #00f7ff inset,
+0 0 35px #00f7ff;
 overflow:hidden;
 }
 
-.radar::after{
+/* Tia quét */
+.radarPro::after{
 content:"";
 position:absolute;
 width:100%;
 height:100%;
-background:conic-gradient(rgba(0,255,255,0.6) 0deg, transparent 60deg);
-animation:scan 1s linear infinite;
+background:conic-gradient(rgba(0,255,255,0.7) 0deg, transparent 70deg);
+animation:radarSpin 0.9s linear infinite;
 }
 
-@keyframes scan{
+@keyframes radarSpin{
 from{transform:rotate(0deg);}
 to{transform:rotate(360deg);}
 }
 
-.scanText{
-color:#00f7ff;
-font-size:13px;
-text-shadow:0 0 10px #00f7ff;
+/* Thanh progress */
+.scanBar{
+width:80%;
+height:6px;
+background:#111;
+border-radius:6px;
+margin:10px auto;
+overflow:hidden;
+}
+
+.scanFill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00f7ff,#00ffff);
+animation:scanProgress 1.2s linear forwards;
+}
+
+@keyframes scanProgress{
+from{width:0%;}
+to{width:100%;}
 }
 </style>
 </head>
@@ -220,7 +255,11 @@ text-shadow:0 0 10px #00f7ff;
 <button class="mainBtn" id="analyzeBtn" onclick="analyze()">PHÂN TÍCH</button>
 
 <!-- RADAR -->
-<div class="radarBox" id="radarBox">
+<div class="scanPro" id="scanPro">
+    <div class="scanTitle">AI SCANNING SYSTEM</div>
+    <div class="radarPro"></div>
+    <div class="scanBar">
+        <div class="scanFill"></div>
 <div class="radar"></div>
 <div class="scanText">AI đang phân tích...</div>
 </div>
@@ -297,11 +336,13 @@ let md5=document.getElementById("md5").value.trim().toLowerCase();
 if(md5.length!=32){alert("MD5 phải đủ 32 ký tự");return;}
 
 document.getElementById("analyzeBtn").disabled=true;
+document.getElementById("scanPro").style.display="block";
 document.getElementById("radarBox").style.display="block";
 
 setTimeout(()=>{
 
 document.getElementById("radarBox").style.display="none";
+document.getElementById("scanPro").style.display="none";
 
 let result, confidence;
 
@@ -320,6 +361,7 @@ let xiu_percent=100-percent;
 
 let lucky=parseInt(md5.substring(0,2),16)%100;
 let winrate = total_count>0 ? Math.floor((win_count/total_count)*100) : 50;
+document.getElementById("winrate").innerText=winrate+"%";
 
 document.getElementById("result").innerText=result;
 document.getElementById("tai").innerText=tai_percent;
