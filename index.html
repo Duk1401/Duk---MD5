@@ -1,25 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HASH PRO (MD5 & SHA-256) — DUK</title>
+<title>HASH PRO MAX (MD5 & SHA-256) — DUK AI CORE</title>
 
 <style>
 body{
     min-height:100vh;
-    background:
-    linear-gradient(
-    180deg,
-    #020617 0%,
-    #0f172a 35%,
-    #111827 100%
-    );
+    background: linear-gradient(180deg, #020617 0%, #0f172a 35%, #111827 100%);
     overflow-x:hidden;
     color:white;
     position:relative;
+    font-family: Arial, sans-serif;
+    margin: 0;
 }
 
-/* glow top */
 body::before{
     content:"";
     position:fixed;
@@ -34,7 +30,6 @@ body::before{
     z-index:0;
 }
 
-/* glow bottom */
 body::after{
     content:"";
     position:fixed;
@@ -49,243 +44,217 @@ body::after{
     z-index:0;
 }
 
-/* mobile */
 @media(max-width:700px){
-    .container{
-        width:100%;
-        padding:15px;
-        padding-top:20px;
-    }
-    .title{
-        font-size:30px;
-        margin-bottom:18px;
-    }
-    .glass{
-        padding:16px;
-        border-radius:22px;
-    }
     button{
-        width:85px;
+        width:90px;
         padding:12px;
-        font-size:15px;
-        border-radius:16px;
-    }
-    .prediction{
-        font-size:22px;
-    }
-    .item{
-        min-width:55px;
-        height:55px;
-        font-size:18px;
+        font-size:14px;
+        border-radius:12px;
     }
 }
 
-/* ===== FIREWORK ===== */
 #fireworks{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-pointer-events:none;
-z-index:0;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:0;
 }
 
-/* ===== HEADER ===== */
 .header{
-padding:18px;
-font-size:24px;
-font-weight:bold;
-background:rgba(0,0,0,0.4);
-backdrop-filter:blur(10px);
-color:#00f7ff;
-text-shadow:0 0 15px #00f7ff,0 0 40px #00f7ff;
-text-align:center;
+    padding:18px;
+    font-size:24px;
+    font-weight:bold;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(10px);
+    color:#00f7ff;
+    text-shadow:0 0 15px #00f7ff, 0 0 40px #00f7ff;
+    text-align:center;
+    position: relative;
+    z-index: 1;
 }
 
-/* ===== MODE NEON ===== */
 .modeBox{
-margin-top:10px;
-padding:10px 20px;
-border-radius:14px;
-font-size:15px;
-font-weight:bold;
-letter-spacing:1px;
-display:inline-block;
-min-width:160px;
-transition:0.3s;
+    margin-top:10px;
+    padding:10px 20px;
+    border-radius:14px;
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:1px;
+    display:inline-block;
+    min-width:160px;
+    transition:0.3s;
 }
 
-/* VIP */
 .mode-vip{
-color:#ffd700;
-background:rgba(255,215,0,0.08);
-box-shadow:
-0 0 12px #ffd700,
-0 0 30px rgba(255,215,0,0.6),
-inset 0 0 12px #ffd700;
-text-shadow:0 0 10px #ffd700,0 0 20px #ffd700;
+    color:#ffd700;
+    background:rgba(255,215,0,0.08);
+    box-shadow: 0 0 12px #ffd700, 0 0 30px rgba(255,215,0,0.6), inset 0 0 12px #ffd700;
+    text-shadow:0 0 10px #ffd700, 0 0 20px #ffd700;
 }
 
-/* BASIC */
 .mode-basic{
-color:#00f7ff;
-background:rgba(0,247,255,0.08);
-box-shadow:
-0 0 12px #00f7ff,
-0 0 30px rgba(0,247,255,0.6),
-inset 0 0 12px #00f7ff;
-text-shadow:0 0 10px #00f7ff,0 0 20px #00f7ff;
+    color:#00f7ff;
+    background:rgba(0,247,255,0.08);
+    box-shadow: 0 0 12px #00f7ff, 0 0 30px rgba(0,247,255,0.6), inset 0 0 12px #00f7ff;
+    text-shadow:0 0 10px #00f7ff, 0 0 20px #00f7ff;
 }
 
-/* ===== BOX ===== */
 .box{
-margin:12px;
-padding:15px;
-border-radius:16px;
-background:rgba(0,0,0,0.35);
-backdrop-filter:blur(14px);
-box-shadow:0 0 25px rgba(0,255,255,0.35);
-text-align:center;
+    margin:12px auto;
+    max-width: 600px;
+    padding:15px;
+    border-radius:16px;
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(14px);
+    box-shadow:0 0 25px rgba(0,255,255,0.2);
+    text-align:center;
+    position: relative;
+    z-index: 1;
 }
 
-/* ===== INPUT ===== */
 input{
-width:90%;
-padding:12px;
-border:none;
-border-radius:10px;
-background:#000;
-color:#00f7ff;
-text-align:center;
-font-size:15px;
-box-shadow:0 0 10px #00f7ff inset;
-outline:none;
+    width:90%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#000;
+    color:#00f7ff;
+    text-align:center;
+    font-size:15px;
+    box-shadow:0 0 10px #00f7ff inset;
+    outline:none;
 }
 
-/* ===== BUTTON ===== */
 button{
-margin-top:10px;
-padding:12px 18px;
-border:none;
-border-radius:10px;
-font-weight:bold;
-cursor:pointer;
+    margin-top:10px;
+    padding:12px 18px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    transition: 0.2s;
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .mainBtn{
-background:#001f2b;
-color:#00f7ff;
-box-shadow:0 0 10px #00f7ff;
+    background:#001f2b;
+    color:#00f7ff;
+    box-shadow:0 0 10px #00f7ff;
 }
 
 .vipBtn{
-background:#2b2100;
-color:#ffd700;
-box-shadow:0 0 12px #ffd700;
+    background:#2b2100;
+    color:#ffd700;
+    box-shadow:0 0 12px #ffd700;
 }
 
 .ok{background:#00c853; color:#fff;}
 .fail{background:#ff1744; color:#fff;}
 
 .big{
-font-size:50px;
-font-weight:bold;
-color:#00f7ff;
-text-shadow:0 0 20px #00f7ff;
+    font-size:50px;
+    font-weight:bold;
+    color:#00f7ff;
+    text-shadow:0 0 20px #00f7ff;
 }
 
 .bar{
-height:10px;
-background:#222;
-border-radius:10px;
-margin-top:10px;
-overflow:hidden;
+    height:10px;
+    background:#222;
+    border-radius:10px;
+    margin-top:10px;
+    overflow:hidden;
 }
 
 .fill{
-height:100%;
-background:linear-gradient(90deg,#ff3d00,#00f7ff);
-width:50%;
-transition:0.5s;
+    height:100%;
+    background:linear-gradient(90deg,#ff3d00,#00f7ff);
+    width:50%;
+    transition:0.5s;
 }
 
 .row{
-display:flex;
-justify-content:space-between;
-padding:4px 10px;
-font-size:14px;
+    display:flex;
+    justify-content:space-between;
+    padding:6px 10px;
+    font-size:14px;
 }
 
 .history{
-font-size:13px;
-text-align:left;
-max-height:140px;
-overflow:auto;
+    font-size:13px;
+    text-align:left;
+    max-height:140px;
+    overflow-y:auto;
+    font-family: monospace;
 }
 
-/* ===== RADAR SCAN ===== */
 .radarBox{
-display:none;
-margin-top:10px;
+    display:none;
+    margin-top:10px;
 }
 
 .radar{
-width:120px;
-height:120px;
-border-radius:50%;
-margin:10px auto;
-position:relative;
-background:radial-gradient(circle, rgba(0,255,255,0.15) 0%, rgba(0,0,0,0.8) 70%);
-box-shadow:0 0 20px #00f7ff inset, 0 0 25px #00f7ff;
-overflow:hidden;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    margin:10px auto;
+    position:relative;
+    background:radial-gradient(circle, rgba(0,255,255,0.15) 0%, rgba(0,0,0,0.8) 70%);
+    box-shadow:0 0 20px #00f7ff inset, 0 0 25px #00f7ff;
+    overflow:hidden;
 }
 
 .radar::after{
-content:"";
-position:absolute;
-width:100%;
-height:100%;
-background:conic-gradient(rgba(0,255,255,0.6) 0deg, transparent 60deg);
-animation:scan 1s linear infinite;
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:conic-gradient(rgba(0,255,255,0.6) 0deg, transparent 60deg);
+    animation:scan 1s linear infinite;
 }
 
 @keyframes scan{
-from{transform:rotate(0deg);}
-to{transform:rotate(360deg);}
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
 }
 
 .scanText{
-color:#00f7ff;
-font-size:13px;
-text-shadow:0 0 10px #00f7ff;
+    color:#00f7ff;
+    font-size:13px;
+    text-shadow:0 0 10px #00f7ff;
 }
 
-/* ===== MAINTENANCE ===== */
 #maintenanceBox{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000;
-display:none;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-z-index:9999;
-color:#00f7ff;
-text-shadow:0 0 20px #00f7ff;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:9999;
+    color:#00f7ff;
+    text-shadow:0 0 20px #00f7ff;
 }
 
 .maintTitle{
-font-size:28px;
-margin-bottom:10px;
+    font-size:28px;
+    margin-bottom:10px;
 }
 
 .maintSub{
-font-size:14px;
-opacity:0.7;
+    font-size:14px;
+    opacity:0.7;
 }
 </style>
 </head>
@@ -295,231 +264,302 @@ opacity:0.7;
 
 <!-- MAINTENANCE -->
 <div id="maintenanceBox">
-<div class="maintTitle">⚙ HỆ THỐNG ĐANG BẢO TRÌ</div>
-<div class="maintSub">Vui lòng quay lại sau...</div>
+    <div class="maintTitle">⚙ HỆ THỐNG ĐANG BẢO TRÌ</div>
+    <div class="maintSub">Vui lòng quay lại sau...</div>
 </div>
 
-<div class="header">HASH PRO (MD5 & SHA-256) — DUK</div>
+<div class="header">HASH PRO MAX (MD5 & SHA-256) — DUK AI</div>
 
 <div class="box">
-<button class="vipBtn" onclick="setMode('vip')">VIP</button>
-<button class="mainBtn" onclick="setMode('basic')">BASIC</button>
-<div id="modeText" class="modeBox mode-vip">👑 VIP MODE</div>
-</div>
-
-<div class="box">
-<input id="hashInput" placeholder="Nhập MD5 (32 ký tự) hoặc SHA-256 (64 ký tự)">
-<br>
-<button class="mainBtn" id="analyzeBtn" onclick="analyze()">PHÂN TÍCH</button>
-
-<!-- RADAR -->
-<div class="radarBox" id="radarBox">
-<div class="radar"></div>
-<div class="scanText">AI SCAN: <span id="scanPercent">0</span>%</div>
-<div class="bar"><div class="fill" id="scanBar" style="width:0%"></div></div>
-</div>
-
-<div id="loading"></div>
+    <button class="vipBtn" onclick="setMode('vip')">VIP CORE</button>
+    <button class="mainBtn" onclick="setMode('basic')">BASIC CORE</button>
+    <br>
+    <div id="modeText" class="modeBox mode-vip">👑 VIP MODE ACTIVE</div>
 </div>
 
 <div class="box">
-<div>DỰ ĐOÁN</div>
-<div class="big" id="result">--</div>
-<div class="bar"><div class="fill" id="bar"></div></div>
+    <input id="hashInput" placeholder="Nhập MD5 (32 ký tự) hoặc SHA-256 (64 ký tự)">
+    <br>
+    <button class="mainBtn" id="analyzeBtn" onclick="analyze()">PHÂN TÍCH CHUỖI</button>
 
-<div class="row">
-<span>TÀI: <span id="tai">50</span>%</span>
-<span>XỈU: <span id="xiu">50</span>%</span>
-</div>
-
-<button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
-<button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button>
-
-<div id="stats">ĐÚNG: 0 | SAI: 0</div>
+    <!-- RADAR -->
+    <div class="radarBox" id="radarBox">
+        <div class="radar"></div>
+        <div class="scanText" id="statusPhase">AI SCANNING...</div>
+        <div class="scanText"><span id="scanPercent">0</span>%</div>
+        <div class="bar"><div class="fill" id="scanBar" style="width:0%"></div></div>
+    </div>
 </div>
 
 <div class="box">
-<div class="row">
-<span>LOẠI HASH</span>
-<span id="hashType">--</span>
-</div>
-<div class="row">
-<span>PHÂN TÍCH THUẬT TOÁN</span>
-<span id="conf">0%</span>
-</div>
+    <div>KẾT QUẢ DỰ ĐOÁN</div>
+    <div class="big" id="result">--</div>
+    <div class="bar"><div class="fill" id="bar"></div></div>
+
+    <div class="row">
+        <span>TÀI: <span id="tai">50</span>%</span>
+        <span>XỈU: <span id="xiu">50</span>%</span>
+    </div>
+
+    <button class="ok" id="btnOk" onclick="mark(true)" disabled>✓ ĐÚNG</button>
+    <button class="fail" id="btnFail" onclick="mark(false)" disabled>✗ SAI</button>
+
+    <div id="stats" style="margin-top:10px;">ĐÚNG: 0 | SAI: 0</div>
 </div>
 
 <div class="box">
-<div class="row">
-<span>MAY MẮN</span>
-<span id="lucky">0</span>
-</div>
+    <div class="row">
+        <span>LOẠI HASH</span>
+        <span id="hashType">--</span>
+    </div>
+    <div class="row">
+        <span>ĐỘ TIN CẬY AI</span>
+        <span id="conf">0%</span>
+    </div>
+    <div class="row">
+        <span>ENTROPY HỆ THỐNG</span>
+        <span id="entropyVal">0.00</span>
+    </div>
 </div>
 
 <div class="box">
-<div class="row">
-<span>TỶ LỆ THẮNG</span>
-<span id="winrate">50%</span>
-</div>
+    <div class="row">
+        <span>CHỈ SỐ MAY MẮN</span>
+        <span id="lucky">0</span>
+    </div>
 </div>
 
 <div class="box">
-<div>LỊCH SỬ (20)</div>
-<div class="history" id="history"></div>
+    <div class="row">
+        <span>TỶ LỆ THẮNG HIỆN TẠI</span>
+        <span id="winrate">50%</span>
+    </div>
+</div>
+
+<div class="box">
+    <div>LỊCH SỬ PHÂN TÍCH (20)</div>
+    <div class="history" id="history"></div>
 </div>
 
 <script>
-let correct=0, wrong=0;
-let history=[];
-let win_count=0;
-let total_count=0;
-let mode="vip";
+// ===== BIẾN TOÀN CỤC =====
+let correct = 0, wrong = 0;
+let historyList = [];
+let win_count = 0;
+let total_count = 0;
+let mode = "vip";
 
-function setMode(m){
-mode=m;
-
-let box=document.getElementById("modeText");
-
-if(m==="vip"){
-box.className="modeBox mode-vip";
-box.innerText="👑 VIP MODE";
-}else{
-box.className="modeBox mode-basic";
-box.innerText="⚡ BASIC MODE";
-}
-}
-
-function analyze(){
-let hash=document.getElementById("hashInput").value.trim().toLowerCase();
-
-// Kiểm tra độ dài: MD5 = 32, SHA-256 = 64
-if(hash.length !== 32 && hash.length !== 64){
-    alert("Chuỗi nhập vào phải là MD5 (32 ký tự) hoặc SHA-256 (64 ký tự)");
-    return;
+// ===== CHUYỂN CHẾ ĐỘ =====
+function setMode(m) {
+    mode = m;
+    let box = document.getElementById("modeText");
+    if (m === "vip") {
+        box.className = "modeBox mode-vip";
+        box.innerText = "👑 VIP MODE ACTIVE";
+    } else {
+        box.className = "modeBox mode-basic";
+        box.innerText = "⚡ BASIC MODE ACTIVE";
+    }
 }
 
-let hashType = hash.length === 64 ? "SHA-256" : "MD5";
-
-document.getElementById("analyzeBtn").disabled=true;
-document.getElementById("radarBox").style.display="block";
-
-let percentScan=0;
-let scanBar=document.getElementById("scanBar");
-let scanText=document.getElementById("scanPercent");
-
-let scanInterval=setInterval(()=>{
-percentScan+=5;
-scanBar.style.width=percentScan+"%";
-scanText.innerText=percentScan;
-
-if(percentScan>=100){
-clearInterval(scanInterval);
-}
-},60);
-
-setTimeout(()=>{
-
-document.getElementById("radarBox").style.display="none";
-
-let result, confidence;
-
-if(mode==="vip"){
-let last=parseInt(hash.slice(-1),16);
-result = last%2==0 ? "TÀI":"XỈU";
-confidence = Math.floor(Math.random()*10)+85;
-}else{
-result = Math.random()<0.5 ? "TÀI":"XỈU";
-confidence = Math.floor(Math.random()*20)+50;
+// ===== THUẬT TOÁN BĂM SEED (NÂNG CẤP) =====
+function hashStringToSeed(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        let char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash |= 0; 
+    }
+    return Math.abs(hash);
 }
 
-let hexValue = parseInt(hash.substring(hash.length - 4), 16);
-
-let base = (mode==="vip") ? 70 : 55;
-let range = (mode==="vip") ? 21 : 31;
-
-let tai_percent = base + (hexValue % range);
-let xiu_percent = 100 - tai_percent;
-
-let lucky=parseInt(hash.substring(0,2),16)%100;
-let winrate = total_count>0 ? Math.floor((win_count/total_count)*100) : 50;
-
-document.getElementById("result").innerText=result;
-document.getElementById("tai").innerText=tai_percent;
-document.getElementById("xiu").innerText=xiu_percent;
-document.getElementById("bar").style.width=tai_percent+"%";
-document.getElementById("hashType").innerText=hashType;
-document.getElementById("conf").innerText=confidence+"%";
-document.getElementById("lucky").innerText=lucky;
-document.getElementById("winrate").innerText=winrate+"%";
-
-document.getElementById("btnOk").disabled=false;
-document.getElementById("btnFail").disabled=false;
-
-history.unshift("[" + hashType + "] " + result + " | " + hash.substring(0,6));
-if(history.length>20) history.pop();
-document.getElementById("history").innerHTML=history.join("<br>");
-
-document.getElementById("analyzeBtn").disabled=false;
-
-},1200);
+// ===== THUẬT TOÁN TÍNH ENTROPY (SHANNON) =====
+function calculateEntropy(str) {
+    let map = {};
+    for (let i = 0; i < str.length; i++) {
+        let c = str[i];
+        map[c] = (map[c] || 0) + 1;
+    }
+    let entropy = 0;
+    for (let c in map) {
+        let p = map[c] / str.length;
+        entropy -= p * Math.log2(p);
+    }
+    return entropy.toFixed(2);
 }
 
-function mark(ok){
-total_count++;
-if(ok){correct++; win_count++;} else wrong++;
+// ===== HÀM PHÂN TÍCH CHÍNH =====
+function analyze() {
+    let hash = document.getElementById("hashInput").value.trim().toLowerCase();
 
-document.getElementById("stats").innerText="ĐÚNG: "+correct+" | SAI: "+wrong;
-document.getElementById("winrate").innerText=Math.floor((win_count/total_count)*100)+"%";
+    // Kiểm tra định dạng Hex & Độ dài
+    let isHex = /^[0-9a-f]+$/.test(hash);
+    if (!isHex || (hash.length !== 32 && hash.length !== 64)) {
+        alert("⚠️ Vui lòng nhập đúng định dạng Hex: MD5 (32 ký tự) hoặc SHA-256 (64 ký tự)!");
+        return;
+    }
 
-document.getElementById("btnOk").disabled=true;
-document.getElementById("btnFail").disabled=true;
+    let hashType = hash.length === 64 ? "SHA-256" : "MD5";
+    
+    // Disable giao diện khi quét
+    document.getElementById("analyzeBtn").disabled = true;
+    document.getElementById("radarBox").style.display = "block";
+
+    let percentScan = 0;
+    let scanBar = document.getElementById("scanBar");
+    let scanText = document.getElementById("scanPercent");
+    let statusPhase = document.getElementById("statusPhase");
+
+    let phases = [
+        "1. Đọc cấu trúc Byte...",
+        "2. Tính toán Entropy...",
+        "3. Phân tích chuỗi Hex...",
+        "4. Tổng hợp xác suất AI..."
+    ];
+
+    let scanInterval = setInterval(() => {
+        percentScan += 4;
+        scanBar.style.width = percentScan + "%";
+        scanText.innerText = percentScan;
+
+        if (percentScan < 25) statusPhase.innerText = phases[0];
+        else if (percentScan < 50) statusPhase.innerText = phases[1];
+        else if (percentScan < 75) statusPhase.innerText = phases[2];
+        else statusPhase.innerText = phases[3];
+
+        if (percentScan >= 100) {
+            clearInterval(scanInterval);
+        }
+    }, 45);
+
+    setTimeout(() => {
+        document.getElementById("radarBox").style.display = "none";
+
+        // ---- THUẬT TOÁN PHÂN TÍCH NÂNG CẤP ----
+        let seed = hashStringToSeed(hash);
+        let entropy = calculateEntropy(hash);
+        
+        // Tính tổng byte Hex
+        let totalByteValue = 0;
+        for (let i = 0; i < hash.length; i += 2) {
+            totalByteValue += parseInt(hash.substring(i, i + 2), 16);
+        }
+
+        let result, confidence, tai_percent;
+
+        if (mode === "vip") {
+            // Logic VIP: Dựa trên tổng Byte + Seed cố định
+            result = (totalByteValue + seed) % 2 === 0 ? "TÀI" : "XỈU";
+            confidence = Math.floor((seed % 12) + 87); // Độ tin cậy từ 87% - 98%
+            
+            let baseRatio = (totalByteValue % 25) + 65; // Tỷ lệ từ 65% - 89%
+            tai_percent = result === "TÀI" ? baseRatio : (100 - baseRatio);
+        } else {
+            // Logic BASIC: Dựa trên Entropy
+            result = Math.floor(parseFloat(entropy) * 100) % 2 === 0 ? "TÀI" : "XỈU";
+            confidence = Math.floor((seed % 25) + 55); // Độ tin cậy từ 55% - 79%
+            
+            let baseRatio = (totalByteValue % 30) + 50; 
+            tai_percent = result === "TÀI" ? baseRatio : (100 - baseRatio);
+        }
+
+        let xiu_percent = 100 - tai_percent;
+        let lucky = (seed % 90) + 10;
+        let winrate = total_count > 0 ? Math.floor((win_count / total_count) * 100) : 50;
+
+        // Cập nhật DOM
+        document.getElementById("result").innerText = result;
+        document.getElementById("tai").innerText = tai_percent;
+        document.getElementById("xiu").innerText = xiu_percent;
+        document.getElementById("bar").style.width = tai_percent + "%";
+        document.getElementById("hashType").innerText = hashType;
+        document.getElementById("conf").innerText = confidence + "%";
+        document.getElementById("entropyVal").innerText = entropy;
+        document.getElementById("lucky").innerText = lucky;
+        document.getElementById("winrate").innerText = winrate + "%";
+
+        // Bật nút đánh giá
+        document.getElementById("btnOk").disabled = false;
+        document.getElementById("btnFail").disabled = false;
+
+        // Lưu lịch sử
+        let timeStr = new Date().toLocaleTimeString('vi-VN', { hour12: false });
+        historyList.unshift(`[${timeStr}] [${hashType}] ${result} (${tai_percent}%) | ${hash.substring(0, 8)}...`);
+        if (historyList.length > 20) historyList.pop();
+        document.getElementById("history").innerHTML = historyList.join("<br>");
+
+        document.getElementById("analyzeBtn").disabled = false;
+
+    }, 1350);
 }
 
-/* FIREWORK */
-let canvas=document.getElementById("fireworks");
-let ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+// ===== ĐÁNH GIÁ KẾT QUẢ =====
+function mark(ok) {
+    total_count++;
+    if (ok) {
+        correct++;
+        win_count++;
+    } else {
+        wrong++;
+    }
 
-let particles=[];
+    document.getElementById("stats").innerText = "ĐÚNG: " + correct + " | SAI: " + wrong;
+    document.getElementById("winrate").innerText = Math.floor((win_count / total_count) * 100) + "%";
 
-function firework(){
-let x=Math.random()*canvas.width;
-let y=canvas.height;
-for(let i=0;i<40;i++){
-particles.push({
-x:x,
-y:y,
-vx:(Math.random()-0.5)*4,
-vy:-Math.random()*6-2,
-life:60
-});
-}
+    document.getElementById("btnOk").disabled = true;
+    document.getElementById("btnFail").disabled = true;
 }
 
-function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-particles.forEach((p,i)=>{
-p.x+=p.vx;
-p.y+=p.vy;
-p.life--;
-ctx.fillStyle="cyan";
-ctx.fillRect(p.x,p.y,2,2);
-if(p.life<=0) particles.splice(i,1);
-});
-requestAnimationFrame(animate);
+// ===== HIỆU ỨNG PHÁO HOA =====
+let canvas = document.getElementById("fireworks");
+let ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+let particles = [];
+
+function firework() {
+    let x = Math.random() * canvas.width;
+    let y = canvas.height;
+    for (let i = 0; i < 25; i++) {
+        particles.push({
+            x: x,
+            y: y,
+            vx: (Math.random() - 0.5) * 4,
+            vy: -Math.random() * 5 - 2,
+            life: 50
+        });
+    }
 }
 
-setInterval(firework,1200);
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        ctx.fillStyle = "rgba(0, 247, 255, " + (p.life / 50) + ")";
+        ctx.fillRect(p.x, p.y, 2, 2);
+        if (p.life <= 0) particles.splice(i, 1);
+    });
+    requestAnimationFrame(animate);
+}
+
+setInterval(firework, 1500);
 animate();
 
-/* ===== MAINTENANCE CONTROL ===== */
-function enableMaintenance(){
-document.getElementById("maintenanceBox").style.display="flex";
+// ===== ĐIỀU KHIỂN BẢO TRÌ =====
+function enableMaintenance() {
+    document.getElementById("maintenanceBox").style.display = "flex";
 }
 
-function disableMaintenance(){
-document.getElementById("maintenanceBox").style.display="none";
+function disableMaintenance() {
+    document.getElementById("maintenanceBox").style.display = "none";
 }
 disableMaintenance();
 </script>
